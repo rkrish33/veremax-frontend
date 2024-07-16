@@ -1,0 +1,322 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="header-title mt-0">{{servId ? "EDIT":"ADD"}} VEHICLE SERVICE DETAILS</h1>
+    </div>
+    <form [formGroup]="Addvehicleservform" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row" style="margin: 0.1 px; max-width: 900px;">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Create Type<span style="color: rgb(235, 12, 12);">*</span></label>
+              <select class="form-control" formControlName="create_type">
+                <option value="1">Individual</option>
+                <option value="2">Bulk</option>
+              </select>
+              <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                <span *ngIf="form.create_type.errors.required">Create Type Required!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="form['create_type'].value=='2'">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <a href="\assets\public\vehicle_service_bulk.xlsx" target="_blank" download><b
+                    style="color: blue;">DOWNLOAD
+                    SAMPLE HERE</b></a>
+              </div>
+            </div>
+            <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+              <div class="col-sm-8">
+                <input #myFile type="file" (change)="changeListener($event.target.files[0])" class="form-control"
+                  accept=".xlsx" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="form['create_type'].value=='1'">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Vehicle Registration No</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.vehicleno.invalid&&submit}"
+                optValues="regno" (keyUp)="registration_no($event)" placeholder="Select Registration No"
+                formControlName="vehicleno" optId="id" [item]="registno">
+              </auto-completen>
+              <div *ngIf="submit && form.vehicleno.errors" class="invalid-feedback">
+                <span *ngIf="form.vehicleno.errors.required">Please Select The projectname </span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-4">
+            <div class="form-group">
+              <label>Service Type</label>
+              <select class="form-control" formControlName="servicetype"
+                [ngClass]="{ 'is-invalid': submit && form.servicetype.errors }">
+                <option value="">Select the Service Type</option>
+                <option value="0">General Service</option>
+                <option value="1">Running Repair</option>
+              </select>
+              <div *ngIf="submit && form.servicetype.errors" class="invalid-feedback">
+                <span *ngIf="form.servicetype.errors.required">Please select the Service Type</span>
+              </div>
+            </div>
+          </div> -->
+         
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Invoice No</label>
+              <input type="text" class="form-control" formControlName="invoiceno" placeholder="Enter Invoice No"
+                [ngClass]="{'is-invalid': submit && form.invoiceno.errors}">
+              <div *ngIf="submit && form.invoiceno.errors" class="invalid-feedback">
+                <span *ngIf="form.invoiceno.errors.required">Enter The Vehicle ID</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Invoice Date</label>
+              <input type="date" class="form-control" formControlName="invdate"
+                [ngClass]="{'is-invalid': submit && form.invdate.errors}">
+              <div *ngIf="submit && form.invdate.errors" class="invalid-feedback">
+                <span *ngIf="form.invdate.errors.required">Select Invoice Date</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Invoice Amount</label>
+              <input type="text" class="form-control" formControlName="invoamt" placeholder="Enter Invoice Amount"
+                [ngClass]="{'is-invalid': submit && form.invoamt.errors}">
+              <div *ngIf="submit && form.invoamt.errors" class="invalid-feedback">
+                <span *ngIf="form.invoamt.errors.required">Enter the Invoice Amount</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Driven Kms</label>
+              <input type="text" class="form-control" formControlName="drivenkms" placeholder="Enter kms driven"
+                [ngClass]="{'is-invalid': submit && form.drivenkms.errors}">
+              <div *ngIf="submit && form.drivenkms.errors" class="invalid-feedback">
+                <span *ngIf="form.drivenkms.errors.required">Enter kms driven</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Vehicle Service Date</label>
+              <input type="date" class="form-control" formControlName="vsdate"
+                [ngClass]="{'is-invalid': submit && form.vsdate.errors}">
+              <div *ngIf="submit && form.vsdate.errors" class="invalid-feedback">
+                <span *ngIf="form.vsdate.errors.required">Select Service Date</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Payment Date</label>
+              <input type="date" class="form-control" formControlName="paymdate"
+                [ngClass]="{'is-invalid': submit && form.paymdate.errors}">
+              <div *ngIf="submit && form.paymdate.errors" class="invalid-feedback">
+                <span *ngIf="form.paymdate.errors.required">Select Payment Date</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Payment Amount</label>
+              <input type="text" class="form-control" formControlName="paymamt" placeholder="Enter Payment Amount"
+                [ngClass]="{'is-invalid': submit && form.paymamt.errors}">
+              <div *ngIf="submit && form.paymamt.errors" class="invalid-feedback">
+                <span *ngIf="form.paymamt.errors.required">Enter the Payment Amount</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>UTR No</label>
+              <input type="text" class="form-control" formControlName="utrno" placeholder="Enter UTR No"
+                [ngClass]="{'is-invalid': submit && form.utrno.errors}">
+              <div *ngIf="submit && form.utrno.errors" class="invalid-feedback">
+                <span *ngIf="form.utrno.errors.required">Enter the UTR No</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Payment To</label>
+              <select class="form-control" formControlName="paymto"
+                [ngClass]="{ 'is-invalid': submit && form.paymto.errors }">
+                <option value="">Select the Payment to</option>
+                <option value="0">To Showroom</option>
+                <option value="1">To Employee</option>
+              </select>
+              <div *ngIf="submit && form.paymto.errors" class="invalid-feedback">
+                <span *ngIf="form.paymto.errors.required">Please Select payment To</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="form['paymto'].value=='0'">
+            <div class="form-group">
+              <label>Service Center Name</label>
+              <input type="text" class="form-control" formControlName="srvc" placeholder="Enter Service Centre Name"
+                [ngClass]="{'is-invalid': submit && form.srvc.errors}">
+              <div *ngIf="submit && form.srvc.errors" class="invalid-feedback">
+                <span *ngIf="form.srvc.errors.required">Enter Service Centre Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="form['paymto'].value=='1'">
+            <div class="form-group">
+              <label>Payment to EmpId</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.empid.invalid&&submit}"
+                optValues="emp_id" (keyUp)="listemployee($event)" placeholder="Select Employee ID"
+                formControlName="empid" optId="emp_id_pk" [item]="employeename">
+              </auto-completen>
+              <div *ngIf="submit && form.empid.errors" class="invalid-feedback">
+                <span *ngIf="form.empid.errors.required">Select Employee ID </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" class="form-control" formControlName="acc_no" placeholder="Enter Account Number"
+                [ngClass]="{'is-invalid': submit && form.acc_no.errors}">
+              <div *ngIf="submit && form.acc_no.errors" class="invalid-feedback">
+                <span *ngIf="form.acc_no.errors.required">Enter Account Number</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Ifsc Code</label>
+              <input type="text" class="form-control" formControlName="ifsc_code" placeholder="Enter Ifsc Code"
+                [ngClass]="{'is-invalid': submit && form.ifsc_code.errors}">
+              <div *ngIf="submit && form.ifsc_code.errors" class="invalid-feedback">
+                <span *ngIf="form.ifsc_code.errors.required">Enter Ifsc Code</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Bill Status</label>
+              <select class="form-control" formControlName="billstatus"
+                [ngClass]="{ 'is-invalid': submit && form.billstatus.errors }">
+                <option value="">Select the Bill status</option>
+                <option value="0">Bill not received</option>
+                <option value="1">Bill received</option>
+              </select>
+              <div *ngIf="submit && form.billstatus.errors" class="invalid-feedback">
+                <span *ngIf="form.billstatus.errors.required">Please select the Bille Status</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="form['billstatus'].value=='1'">
+            <div class="form-group">
+              <label>Bill Receive Date</label>
+              <input type="date" class="form-control" formControlName="billrecdate"
+                [ngClass]="{'is-invalid': submit && form.billrecdate.errors}">
+              <div *ngIf="submit && form.billrecdate.errors" class="invalid-feedback">
+                <span *ngIf="form.billrecdate.errors.required">Select Bill Received Date</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-4">
+            <div class="form-group">
+              <label>Service Type</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.servtype.invalid&&submit}"
+                optValues="servicetypename" (keyUp)="servicetype($event)" placeholder="Select Service type"
+                formControlName="servtype" optId="vstid" [item]="servicetypes">
+              </auto-completen>
+              <div *ngIf="submit && form.servtype.errors" class="invalid-feedback">
+                <span *ngIf="form.servtype.errors.required">Please Select Service Type </span>
+              </div>
+             </div>
+            </div> -->
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="Circle stats">State</label>
+              <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':form.circle_name.invalid && submit}"
+                optValues="name" (keyUp)="circle($event)" (changed)="changeCluster()" placeholder="Select State"
+                formControlName="circle_name" Id="id" [item]="circles">
+              </auto-completen>
+              <div *ngIf="submit && form.circle_name.errors" class="invalid-feedback">
+                <span *ngIf="form.circle_name.errors.required">Circle type is required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>District</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.cluster.invalid && submit}"
+                optValues="name" (keyUp)="changeCluster($event)" placeholder="Select District" formControlName="cluster"
+                Id="id" [item]="clusters">
+              </auto-completen>
+              <div *ngIf="submit && form.cluster.errors" class="invalid-feedback">
+                <span *ngIf="form.cluster.errors.required">Please Select Cluster</span>
+              </div>
+            </div>
+          </div>
+           <div class="col-sm-4">
+            <div class="form-group">
+              <label>Service Item</label>
+              <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':form.serviceitem.invalid&&submit}"
+                optValues="servicetypename" (keyUp)="Serviceitem($event)" placeholder="Select Service Item"
+                formControlName="serviceitem" optId="vsitid"  [MultiSelect]=true [item]="serviceitems">
+              </auto-completen>
+              <div *ngIf="submit && form.serviceitem.errors" class="invalid-feedback">
+                <span *ngIf="form.serviceitem.errors.required">Please Select Service Item </span>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-sm-4" *ngIf="form['serviceitem'].value=='12'">
+            <div class="form-group">
+              <label>Service Remarks</label>
+              <textarea type="text" class="form-control" formControlName="servremark" placeholder="Remarks"
+              [ngClass]="{'is-invalid': submit && form.servremark.errors}"></textarea>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Invoice Upload</label><label style="color: rgb(235, 12, 12);">*</label>
+              <input type="file" class="form-control"  Accept="'png','jpg','pdf'" id="formFile" multiple
+                (change)="upload($event.target.files[0],1)" formControlName="srvimg1"
+                [ngClass]="{'is-invalid': submit && form.srvimg1.errors}">
+              <div *ngIf="submit && form.srvimg1.errors" class="invalid-feedback">
+                <span *ngIf="form.srvimg1.errors.required">Choose the file</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="imageURL.length">
+            <label>Proof Preview</label><br>
+            <img [src]="imageURL" style="width: 100%;height: 150px">
+          </div>
+          <!-- <div class="col-sm-6">
+            <div class="form-group">
+              <label>GST Upload class="form-control" formControlName="srvimg2"
+                (change)="upload($event.target.files[0],2)"
+                [ngClass]="{'is-invalid': submit && form.srvimg2.errors}">
+               <div *ngIf="submit && form.srvimg2.errors" class="invalid-feedback">
+                <span *ngIf="form.srvimg2.errors.required">Choose the file</span>
+               </div>
+             </div>
+           </div> -->
+         </div>
+       </div>
+       <div class="card-footer">
+       <div style="text-align: center;">
+          <button type="submit" class="btn btn-success">{{servId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+          <button type="button" (click)="onReset(Addvehicleservform)" class="btn btn-danger">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

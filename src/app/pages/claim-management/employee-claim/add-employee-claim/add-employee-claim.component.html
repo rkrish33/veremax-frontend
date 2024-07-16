@@ -1,0 +1,319 @@
+<div class="col-sm-12">
+
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{claimId ?"Edit":"Add"}} Employee Claim</h4>
+    </div>
+    <form [formGroup]="Addemployeeclaimform" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row" style="margin: 0.1 px; max-width: 900px;">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Create Type<span style="color: rgb(235, 12, 12);">*</span></label>
+              <select class="form-control" formControlName="create_type">
+                <option value="1">Individual</option>
+                <option value="2">Bulk</option>
+              </select>
+              <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                <span *ngIf="form.create_type.errors.required">Create Type Required!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="form['create_type'].value=='2'">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <a href="\assets\public\Emplolyee_claim_bulk.xlsx" target="_blank" download><b
+                    style="color: blue;">DOWNLOAD
+                    SAMPLE HERE</b></a>
+              </div>
+            </div>
+            <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+              <div class="col-sm-8">
+                <input #myFile type="file" (change)="changeListener($event.target.files[0])" class="form-control"
+                  accept=".xlsx" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row" *ngIf="form['create_type'].value=='1'">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Project Name</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.projectidfk.invalid&&submit}"
+                optValues="project_title" (keyUp)="getProject($event)" (changed)="getEmployeeId()"
+                placeholder="Select Project Name" formControlName="projectidfk" optId="project_id" [item]="projectList">
+              </auto-completen>
+              <div *ngIf="submit && form.projectidfk.errors" class="invalid-feedback">
+                <span *ngIf="form.projectidfk.errors.required">Project Name Required</span>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- <div class="col-sm-3">
+            <div class="form-group">
+              <label>Project Name</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.projectidfk.invalid&&submit}"
+                optValues="project_title" (keyUp)="getProject($event)" placeholder="Select Project Name" (changed)=" form.user_cur_levelid.setValue('');form.userid.setValue('');
+                   getProjectInfo()" formControlName="projectidfk" optId="project_id" [item]="projectList">
+              </auto-completen>
+              <div *ngIf="submit && form.projectidfk.errors" class="invalid-feedback">
+                <span *ngIf="form.projectidfk.errors.required">Project Name Required</span>
+              </div>
+            </div>
+          </div> -->
+          <!-- 
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Employee Id</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_id.invalid&&submit}"
+                optValues="emp_id" (changed)="getEmployee($event)" placeholder="Select Employee Id" formControlName="emp_id" optId="emp_id_pk"
+                [item]="employeeList">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_id.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_id.errors.required">Employee ID Required</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Employee Name</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_name.invalid&&submit}"
+                optValues="full_name" placeholder="Select Employee Name" formControlName="emp_name" optId="emp_id_pk"
+                [item]="employeeList">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_name.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_name.errors.required">Employee Name Required</span>
+              </div>
+            </div>
+          </div> -->
+
+
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Employee ID</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.emp_id.invalid&&submit}"
+                optValues="emp_id" (keyUp)="getEmployeeId($event);" (changed)="getEmployeeName();"
+                placeholder="Select Employee ID" formControlName="emp_id" optId="emp_id_pk" [item]="employeeid">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_id.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_id.errors.required">Please Select Employee Id</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Employee Name</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.emp_name.invalid&&submit}"
+                optValues="full_name" (keyUp)="prtypemenu($event);" placeholder="Select Employee Name"
+                formControlName="emp_name" optId="emp_id_pk" [item]="employeename">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_name.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_name.errors.required">Select Employee Name</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Department</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.emp_deptid.invalid&&submit}"
+                optValues="depname" (keyUp)="listempdepartment($event)" (changed)="listempdesignation()"
+                placeholder="Select Employee Department" formControlName="emp_deptid" optId="id" [item]="empdepartment">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_deptid.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_deptid.errors.required">Please Select Employee Department </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Designation</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_desid.invalid&&submit}"
+                optValues="desname" (keyUp)="listempdesignation($event)" placeholder="Select Employee Designation"
+                formControlName="emp_desid" optId="id" [item]="empdesignation">
+              </auto-completen>
+              <div *ngIf="submit && form.emp_desid.errors" class="invalid-feedback">
+                <span *ngIf="form.emp_desid.errors.required">Please Select Employee Designation </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label for="Circle stats">State</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.state_id.invalid && submit}"
+                optValues="name" (keyUp)="circle($event)" (changed)="changeCluster()" placeholder="Select State"
+                formControlName="state_id" optId="id" [item]="circles">
+              </auto-completen>
+              <div *ngIf="submit && form.state_id.errors" class="invalid-feedback">
+                <span *ngIf="form.state_id.errors.required">Circle type is required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>District</label>
+              <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':form.district_id.invalid && submit}"
+                optValues="name" (keyUp)="changeCluster($event)" placeholder="Select District"
+                formControlName="district_id" optId="id" [item]="clusters">
+              </auto-completen>
+              <div *ngIf="submit && form.district_id.errors" class="invalid-feedback">
+                <span *ngIf="form.district_id.errors.required">Please Select Cluster</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-sm-3">
+            <div class="form-group">
+              <label>Department</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.department.invalid&&submit}"
+                optValues="prname" (keyUp)="prtypelist($event);" (changed)="prtypemenu();"
+                placeholder="Select Department" formControlName="department" optId="prid" [item]="prtype">
+              </auto-completen>
+              <div *ngIf="submit && form.department.errors" class="invalid-feedback">
+                <span *ngIf="form.department.errors.required">PR Type is required</span>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Type</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.type.invalid&&submit}"
+                optValues="prsmname" (keyUp)="prtypemenu($event);" (changed)="prtypesubmenu();"
+                placeholder="Select Type" formControlName="type" optId="prsmid" [item]="prtypmenu">
+              </auto-completen>
+              <div *ngIf="submit && form.type.errors" class="invalid-feedback">
+                <span *ngIf="form.type.errors.required">Select PR Menu</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Activity</label>
+              <select class="form-control" formControlName="activity">
+                <option value="">Select Activity</option>
+                <option value="1">O&M</option>
+                <option value="2">Project</option>
+                <option value="3">Other</option>
+              </select>
+              <div *ngIf="submit && form.activity.errors" class="invalid-feedback">
+                <span *ngIf="form.activity.errors.required">Select Activity
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Claim Amount</label>
+              <input type="number" class="form-control" min="1" formControlName="claim_amt"
+                placeholder="Enter Claim Amount">
+              <!-- [ngClass]="{'is-invalid': submit && form.claim_amt.errors}" -->
+              <div *ngIf="submit && form.claim_amt.errors" class="invalid-feedback">
+                <span *ngIf="form.claim_amt.errors.required">Claim Amount Required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Service Period Start</label>
+              <input type="date" class="form-control" formControlName="start_date"
+                placeholder="Service Period Start Date" [ngClass]="{'is-invalid': submit && form.start_date.errors}">
+              <div *ngIf="submit && form.start_date.errors" class="invalid-feedback">
+                <span *ngIf="form.start_date.errors.required">Please Fill Date</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Service Period End</label>
+              <input type="date" class="form-control" formControlName="end_date" placeholder="Service Period End Date"
+                [ngClass]="{'is-invalid': submit && form.end_date.errors}">
+              <div *ngIf="submit && form.end_date.errors" class="invalid-feedback">
+                <span *ngIf="form.end_date.errors.required">Please Fill Date</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="row" *ngIf="form['create_type'].value=='1'">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Claim Upload</label>
+              <input type="file" class="form-control"  Accept="'png','jpg','pdf'" id="formFile" [multiple]="true"
+                (change)="upload($event)" formControlName="claimimg"
+                [ngClass]="{'is-invalid': submit && form.claimimg.errors}">
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="imageURL.length">
+            <label>Proof Preview</label><br>
+            <img [src]="imageURL" style="width: 100%;height: 100px">
+          </div>
+        </div> -->
+
+        <div class="row" *ngIf="form['create_type'].value =='1'  ">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Claim Upload</label>
+              <input type="file" class="form-control" Accept="'png','jpg','pdf'" id="formFile" [multiple]="true"
+                (change)="uploadMultiple($event)" formControlName="claimimg">
+            </div>
+          </div>
+
+          <div class="col-sm-3" *ngIf="!this.claimId">
+            <div class="form-group">
+              <label>Bill Upload</label>
+              <input type="file" class="form-control" Accept="'png','jpg','pdf'" id="formFile1" [multiple]="true"
+                (change)="uploadMultiple1($event)" formControlName="billimg">
+            </div>
+          </div>
+
+<!-- 
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Approval Levels</label>
+              <select class="form-control" formControlName="approval">
+                <option value="">Select Approval Level</option>
+                <option value="1">FRT Approval</option>
+                <option value="2">Circle Head Approval</option>
+                <option value="3">Final Approval</option>
+                <option value="99">Rejected</option>
+              </select>
+              <div *ngIf="submit && form.approval.errors" class="invalid-feedback">
+                <span *ngIf="form.approval.errors.required">Select Approval
+                </span>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div style="text-align: center;">
+          <button type="submit" class="btn btn-success">{{claimId ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+          <button type="button" (click)="onReset(Addemployeeclaimform)" class="btn btn-danger">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>

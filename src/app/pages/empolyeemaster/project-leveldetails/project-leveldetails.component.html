@@ -1,0 +1,101 @@
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">Add Project Level Details</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="projectLevelForm" (ngSubmit)="OnSumbit()">
+          <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                <label>Select The Project</label>
+                <!-- <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':projectLevelForm.controls.project_id.invalid&&submit}"
+                optValues="first_name" (keyUp)="listProjects($event='')" placeholder="Select Project"
+                formControlName="project_id" optId="project_id" [item]="projects">
+              </auto-completen> -->
+                <select class="form-control" formControlName="project_id" (change)="listRoles()">
+                  <option value="" selected>Select The Project</option>
+                  <option *ngFor="let items of projects" [ngValue]="items.project_id">{{items.project_title}}</option>
+                </select>
+                <div *ngIf="submit && ctrl.project_id.errors" class="invalid-feedback">
+                  <span *ngIf="ctrl.project_id.errors.required">Please Select The Project</span>
+                </div>
+              </div>
+              </div>
+              <!-- <div class="col-sm-6"> --> 
+                <!-- <div class="form-group">
+                  <label>Circle</label>
+                  <select class="form-control" formControlName="circle_name" (change)="changecluster();getemployeename()"
+
+
+                    [ngClass]="{'is-invalid': submit && ctrl.circle_name.errors}">
+                    <option value="">Select circle name</option>
+                    <option *ngFor="let items of circles" [ngValue]="items.state_mas_id">{{items.state_name}}</option>
+    
+                  </select>
+                  <div *ngIf="submit && ctrl.circle_name.errors" class="invalid-feedback">
+                    <span *ngIf="ctrl.circle_name.errors.required">Please slect the Circle</span>
+                  </div>
+                </div> -->
+              <!-- </div>
+              <div class="col-sm-6"> -->
+                <!-- <div class="form-group">
+                  <label>Cluster</label>
+                  <select class="form-control" formControlName="cluster"
+                    [ngClass]="{'is-invalid': submit && ctrl.cluster.errors}">
+                    <option value="">Select cluster</option>
+                    <option *ngFor="let items of clusters" [ngValue]="items.maintenace_point_id">{{items.mept_name}}
+                    </option>
+                  </select>
+                  <div *ngIf="submit && ctrl.cluster.errors" class="invalid-feedback">
+                    <span *ngIf="ctrl.cluster.errors.required">Please slect the Cluster</span>
+                  </div>
+                </div> -->
+              <!-- </div> -->
+         
+         
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Employee Name</label>
+                  <!-- <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':projectLevelForm.controls.employee_id.invalid&&submit}"
+                      optValues="first_name" (keyUp)="getemployeename()" placeholder="Select Employee"
+                      formControlName="employee_id" optId="emp_id_pk" [item]="employeenames"> 
+                    </auto-completen> -->
+
+                  <select class="form-control" formControlName="employee_id"
+                    [ngClass]="{'is-invalid': submit && ctrl.employee_id.errors}">
+                    <option value="">select</option>
+                    <option *ngFor="let items of employeenames" [ngValue]="items.emp_id_pk">{{items.full_name}}</option>
+                  </select>
+                  <div *ngIf="submit && ctrl.employee_id.errors" class="invalid-feedback">
+                    <span *ngIf="ctrl.employee_id.errors.required">Enter THe Employee name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Designation</label>
+                  <select class="form-control" formControlName="design_name">
+                    <option value="" selected>Select The Designation</option>
+                    <option *ngFor="let items of Roles" 
+                     [ngValue]="items.descid"><div (click)="getDetid()">{{items.desc_name}}</div>
+                    </option>
+                  </select>
+                
+                </div>
+              </div>
+        </div>
+        
+  
+          <div class="card-footer">
+            <div style="text-align: center;">
+              <button type="submit" class="btn btn-success">{{buyid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+              <!-- <button type="button" (click)="onReset(projectLevelForm)" class="btn btn-danger">Reset</button> -->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>

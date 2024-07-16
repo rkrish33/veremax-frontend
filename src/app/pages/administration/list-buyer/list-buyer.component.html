@@ -1,0 +1,112 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">LIST Buyer</h4>
+    </div>
+
+    <div class="card-body"> 
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="form-group">
+            <label>Buyer Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+           
+            <auto-completen
+              [addclass]="{'form-control': true   }"
+              optValues="buyer_name" (keyUp)="dropDownBuyer($event)"  placeholder="Select Buyer"  [(ngModel)]="buyer_name"
+              optId="buyer_id" [item]="buyerDatas">
+            </auto-completen>
+           </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="form-group">
+            <label>Company Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+           
+            <auto-completen
+              [addclass]="{'form-control': true}"
+              optValues="company_name" (keyUp)="dropDownBuyer($event)"  placeholder="Select Buyer" 
+              [(ngModel)]="company_name"
+              optId="buyer_id" [item]="buyerDatas">
+            </auto-completen>
+           </div>
+        </div>
+      </div>
+      </div> 
+      <div class="col-sm-5">
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary" (click)="listbuyer()">Search</button>&nbsp;&nbsp;
+          <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <p *ngIf="listDatas">Total Records Found:{{listDatas[1].total}}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <nav *ngIf="pager" aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=1;getlist();">First</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=page-1;getlist();">Previous</a></li>
+                <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=page+1;getlist();">Next</a></li>
+                <li class="page-item"> <a class="page-link"
+                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+              </ul>
+            </nav>
+          </div>
+          <label>show</label>
+          <div class="col-sm-4">
+            <select [(ngModel)]="limit" (change)="listbuyer()" class="form-control"
+              style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+      <div class="table-responsive">
+        <table class="table table-striped mb-0">
+          <thead  style="background-color:rgb(186, 199, 204);">
+            <tr>
+              <th>Action</th>
+              <th>Buyer Name</th>
+              <th>Company Name</th>
+              <th>Register Address</th>
+              <th>Shipment Address</th>
+              <th>PAN no</th>
+              <th>GST no</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="listDatas">
+            <tr *ngFor="let items of listDatas[0]">
+              <td class="overflow-hidden">
+                <div ngbDropdown container="body">
+                  <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                  <div ngbDropdownMenu>
+                    <button ngbDropdownItem [routerLink]="['/pages/administration/add-buyer']"
+                      [queryParams]="{buyer_id:items.buyer_id}">Edit</button>
+                    <button ngbDropdownItem>View</button>
+                    <button ngbDropdownItem>Delete</button>
+                  </div>
+                </div>
+              </td>
+              <td>{{items.buyer_name}}</td>
+              <td>{{items.company_name}}</td>
+              <td>{{items.register_address}}</td>
+              <td>{{items.shipment_address}}</td>
+              <td>{{items.pan_no}}</td>
+              <td>{{items.gst_no}}</td>
+              <td>{{items.state_name}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+</div>
+</div>
+
+

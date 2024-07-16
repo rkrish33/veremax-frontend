@@ -1,0 +1,55 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="header-title mt-0">{{prtypeid ? "Edit":"ADD"}}PR TYPE MENU 1</h1>
+        </div>
+        <form [formGroup]="Addprtypemenu2" (ngSubmit)="onSubmit()">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                          <label>PR Type</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                          <auto-completen
+                            [addclass]="{'form-control' : true,'form-control-danger':form.prid.invalid&&submit}"
+                            optValues="prname" (keyUp)="prtypelist($event);" (changed)="prtypemenu();"
+                            placeholder="Select PR TYpe" formControlName="prid" optId="prid" [item]="prtype">
+                          </auto-completen>
+                          <div *ngIf="submit && form.prid.errors" class="invalid-feedback">
+                            <span *ngIf="form.prid.errors.required">PR Type is required</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" >
+                        <div class="form-group">
+                          <label>PR Type Menu</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                          <auto-completen
+                            [addclass]="{'form-control' : true,'form-control-danger':form.prsm.invalid&&submit}"
+                            optValues="prsmname" (keyUp)="prtypemenu($event)" placeholder="Select PR Type Menu"
+                            formControlName="prsm" optId="prsmid" [item]="prtypmenu">
+                          </auto-completen>
+                          <div *ngIf="submit && form.prsm.errors" class="invalid-feedback">
+                            <span *ngIf="form.prsm.errors.required">Select PR Menu</span>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Menu Content</label>
+                            <input type="text" class="form-control" formControlName="prsmname" placeholder="Enter Menu"
+                                [ngClass]="{'is-invalid': submit && form.prsmname.errors}">
+                            <div *ngIf="submit && form.prsmname.errors" class="invalid-feedback">
+                                <span *ngIf="form.prsmname.errors.required">Enter Menu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-success">{{prtypeid ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+                    <button type="button" (click)="onReset(Addprtypemenu2)" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

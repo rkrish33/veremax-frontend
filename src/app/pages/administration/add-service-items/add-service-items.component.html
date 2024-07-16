@@ -1,0 +1,30 @@
+<div class="col-sm-9">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{id?"Edit":"Add"}} SERVICE ITEMS</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="serviceitemsform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Service Item</label>
+                <input type="text" class="form-control" formControlName="serviceitem" placeholder="Enter Service Item"
+                  [ngClass]="{'is-invalid': submit && form.serviceitem.errors}">
+                <div *ngIf="submit && form.serviceitem.errors" class="invalid-feedback">
+                  <span *ngIf="form.serviceitem.errors.required">Pls Fill Service Item</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(serviceitemsform)" class="btn btn-danger">Reset</button>
+          </div>
+          </form>
+      </div>
+    </div>
+    </div>
+  
+  
+  

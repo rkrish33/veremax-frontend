@@ -1,0 +1,68 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-body">
+            <form [formGroup]="UpdateVehicleDocform">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Insurance Document</label>
+                            <input type="file" class="form-control" formControlName="ins_doc"
+                                (change)="upload($event.target.files[0])"
+                                [ngClass]="{'is-invalid':submit && form.ins_doc.errors}">
+                            <div *ngIf="submit && form.ins_doc.errors" class="invalid-feedback">
+                                <span *ngIf="form.ins_doc.errors.required">Choose a file</span>
+                            </div>
+                            <img *ngFor="let url of imageURL" [src]="url" style="width: 100%;height: 150px">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Pollution Document</label>
+                            <input type="file" class="form-control" formControlName="poll_doc"
+                                (change)="upload($event.target.files[0])"
+                                [ngClass]="{'is-invalid':submit && form.poll_doc.errors}">
+                            <div *ngIf="submit && form.poll_doc.errors" class="invalid-feedback">
+                                <span *ngIf="form.poll_doc.errors.required">Choose a file</span>
+                            </div>
+                            <img *ngFor="let url of imageURL" [src]="url" style="width: 100%;height: 150px">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Permit Document</label>
+                            <input type="file" class="form-control" formControlName="per_doc"
+                                (change)="upload($event.target.files[0])"
+                                [ngClass]="{'is-invalid':submit && form.per_doc.errors}">
+                            <div *ngIf="submit && form.per_doc.errors" class="invalid-feedback">
+                                <span *ngIf="form.per_doc.errors.required">Choose a file</span>
+                            </div>
+                            <img *ngFor="let url of imageURL" [src]="url" style="width: 100%;height: 150px">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>FC Document</label>
+                            <input type="file" class="form-control" formControlName="fc_doc"
+                                (change)="upload($event.target.files[0])"
+                                [ngClass]="{'is-invalid':submit && form.fc_doc.errors}">
+                            <div *ngIf="submit && form.fc_doc.errors" class="invalid-feedback">
+                                <span *ngIf="form.fc_doc.errors.required">Choose a file</span>
+                            </div>
+                            <img *ngFor="let url of imageURL" [src]="url" style="width: 100%;height: 150px">
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;">
+                    <button type="submit" (click)="onSubmit()" class="btn btn-success">Update</button>&nbsp;&nbsp;
+                    <!-- <button type="button" (click)="onReset()" class="btn btn-danger">Reset</button> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

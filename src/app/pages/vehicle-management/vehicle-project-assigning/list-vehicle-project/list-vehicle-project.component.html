@@ -1,0 +1,127 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header" style="background-color:rgb(255, 255, 255) ;">
+            <button type="submit" style="float:left ;" class="btn btn-success" (click)="btnClick()">Add</button>
+            <button type="submit" style="float:right;" class="btn btn-success"(click)="download()">Export</button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Project</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="project_title"
+                            (keyUp)="listProjects($event)" placeholder="Select Project" [(ngModel)]="project_id"
+                            optId="project_id" [item]="projects">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Vehicle Registration No</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="regno"
+                            (keyUp)="registration_no($event)" placeholder="Select Registration No" [(ngModel)]="regNo"
+                            optId="vid" [item]="registno">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>State</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+                            placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id"
+                            [item]="circles">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                        <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+                        placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+                        </auto-completen>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="text-centre">
+                <button type="submit" class="btn btn-success" (click)="listVehicle()">Search</button>&nbsp;&nbsp;
+                <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <p *ngIf="listvehicles">Total Records Found:{{listvehicles[1].total}}</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <nav *ngIf="pager" aria-label="Page navigation example">
+                        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                            <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=1;getlist();">First</a></li>
+                            <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=page-1;getlist();">Previous</a></li>
+                            <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=page+1;getlist();">Next</a></li>
+                            <li class="page-item"> <a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <label>Show</label>
+                <div class="col-sm-4">
+                    <select [(ngModel)]="limit" (change)="listVehicle()" class="form-control"
+                        style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="25">150</option>
+                        <option value="50">200</option>
+                        <option value="100">250</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body" style="text-align: center;">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead style="background-color: rgb(235, 216, 65);">
+                            <tr>
+                                <th>Action</th>
+                                <th>Name</th>
+                                <th>Vehicle No</th>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Project Start Date</th>
+                                <th>Project End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listvehicles">
+                            <tr *ngFor="let items of listvehicles[0]">
+                                <td class="overflow-hidden">
+                                    <div ngbDropdown container="body">
+                                        <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                                        <div ngbDropdownMenu>
+                                            <button ngbDropdownItem
+                                                [routerLink]="['/pages/Vehicle/Vehicle_Management/addprojectvehicle']"
+                                                [queryParams]="{id:items.id}" [skipLocationChange]="true">Edit</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{items.project_title}}</td>
+                                <td>{{items.regno}}</td>
+                                <td>{{items.statename}}</td>
+                                <td>{{items.distname}}</td>
+                                <td>{{items.start_date | date:"yyyy-MM-dd"}}</td>
+                                <td>{{items.end_date | date:"yyyy-MM-dd"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

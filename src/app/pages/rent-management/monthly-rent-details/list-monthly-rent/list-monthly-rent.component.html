@@ -1,0 +1,148 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header" style="background-color:rgb(255, 255, 255) ;">
+      <button type="submit" style="float:left ;" class="btn btn-success" (click)="btnClick()">Add</button>
+      <button type="submit" style="float:right;" class="btn btn-success"(click)="download()">Export</button>
+  </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Rent Type</label>
+            <select class="form-control" [(ngModel)]="rent_type">
+              <option value="default">Select Rent Type</option>
+              <option value="1">Rent</option>
+              <option value="2">Advance</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Project ID</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="project_title" (keyUp)="listProjects($event)"
+              placeholder="Select Project" [(ngModel)]="project_id" optId="project_id" [item]="projects">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>State</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+              placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id" [item]="circles">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+            <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+              placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">Paid Date</label>
+            <input type="date" class="form-control" [(ngModel)]="paid_date">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="text-center">
+        <button type="submit" class="btn btn-success" (click)="listRent()">Search</button>&nbsp;&nbsp;
+        <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <p *ngIf="listDatas">Total Records Found:{{listDatas[1].total}}</p>
+      <div class="row">
+        <div class="col-sm-6">
+          <nav *ngIf="pager" aria-label="Page navigation example">
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+              <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                  (click)="page=1;getlist();">First</a></li>
+              <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                  (click)="page=page-1;getlist();">Previous</a></li>
+              <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                  [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+              <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                  (click)="page=page+1;getlist();">Next</a></li>
+              <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                  (click)="page=pager.totalPages;getlist();">Last</a></li>
+            </ul>
+          </nav>
+        </div>
+        <label>show</label>
+        <div class="col-sm-4">
+          <select [(ngModel)]="limit" (change)="listRent()" class="form-control"
+            style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="25">150</option>
+            <option value="50">200</option>
+            <option value="100">250</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success" (click)="download()">Download</button>
+      </div>
+      <div class="table-responsive" style="text-align: center;">
+        <table class="table table-striped mb-0">
+          <thead style="background-color: rgb(235, 216, 65);">
+            <tr>
+              <th>Action</th>
+              <th>Rent Type</th>
+              <th>Room ID</th>
+              <th>Project</th>
+              <th>Monthly Rent Paid</th>
+              <th>Advance Amount Paid</th>
+              <th>State</th>
+              <th>District</th>
+              <th>Paid Date</th>
+              <th>Payment Mode</th>
+              <th>UTR No</th>
+              <th>Cheque No</th>
+              <th>Pay To</th>
+              <th>Brokerage Amount</th>
+              <th>Advance Recovery Amount</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="listDatas">
+            <tr *ngFor="let items of listDatas[0]">
+              <td class="overflow-hidden">
+                <div ngbDropdown container="body">
+                  <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action
+                    <i [attr.data-feather]="'chevron-down'" appFeatherIcon></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <button ngbDropdownItem [routerLink]="['/pages/Rent/Rental_Management/addmonthlyrent']"
+                      [queryParams]="{rentid:items.rentid}" [skipLocationChange]="true">Edit</button>
+                  </div>
+                </div>
+              </td>
+              <td>{{items.renttype == 1 ? "Rent": "Advance"}}</td>
+              <td>{{items.roomid}}</td>
+              <td>{{items.project_title}}</td>
+              <td>{{items.renttype == 1 ? items.rentamt:0}}</td>
+              <td>{{items.renttype == 1 ? 0:items.rentamt}}</td>
+              <td>{{items.statename}}</td>
+              <td>{{items.districtname}}</td>
+              <td>{{items.paymonthdate}}</td>
+              <td>{{items.paymode == 1 ? "To Account" : items.paymode == 2 ? "By Hand Cash": items.paymode == 3 ? "Cheque" : "Others"}}</td>
+              <td>{{items.utr}}</td>
+              <td>{{items.cheque_no}}</td>
+              <td>{{items.paid_name}}</td>
+              <td>{{items.brokerage_amt}}</td>
+              <td>{{items.recovery_amt}}</td>
+              <td>{{items.rentnote}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>

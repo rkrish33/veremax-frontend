@@ -1,0 +1,74 @@
+<div class="col-md-12">
+  <div class="card">
+    <!-- <toaster-container></toaster-container> -->
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Role Details</h4>
+    </div>
+    <form [formGroup]="roleUserForm" class="form-horizontal" (ngSubmit)="onSubmit();">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Profile Name</label>
+              <input type="text" class="form-control" formControlName="profile" placeholder="Enter Profile Name"
+                [ngClass]="{'is-invalid': submit && f.profile.errors}">
+              <div *ngIf="submit && f.profile.errors" class="invalid-feedback">
+                <span *ngIf="f.profile.errors.required">Enter Profile Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" class="form-control" formControlName="description" placeholder="Enter User Name"
+                [ngClass]="{'is-invalid': submit && f.description.errors}">
+              <div *ngIf="submit && f.description.errors" class="invalid-feedback">
+                <span *ngIf="f.description.errors.required">Enter Description </span>
+              </div>
+            </div>
+          </div>
+          <tree-root #tree [nodes]="nodes" [options]="options"></tree-root>
+        </div>
+      </div>
+
+      <div class="card-footer">
+         <div style="text-align: center;">
+          <button type="submit" class="btn btn-success">Submit</button>&nbsp;&nbsp;
+          <!-- <button type="button" (click)="onReset(roleUserForm)" class="btn btn-danger">Reset</button> -->
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Role Details</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Role Name</label>
+                <input type="text" class="form-control" formControlName="rolename" placeholder="Enter Role Name"
+                  [ngClass]="{'is-invalid': submit && form.rolename.errors}">
+                <div *ngIf="submit && form.rolename.errors" class="invalid-feedback">
+                  <span *ngIf="form.rolename.errors.required">Pls fill Role Name</span>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="card-footer">
+            <div style="text-align: center;">
+              <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+              <button type="button" (click)="onReset(roleForm)" class="btn btn-danger">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div> -->

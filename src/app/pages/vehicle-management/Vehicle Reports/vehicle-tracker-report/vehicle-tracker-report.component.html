@@ -1,0 +1,598 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="header-title mt-0">TRIP SHEET LIST</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Vehicle Registration No</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="regno" (keyUp)="registration_no($event)"
+              placeholder="Select Registration No" [(ngModel)]="regNo" optId="vehicle_id" [item]="registno">
+            </auto-completen>
+          </div>
+        </div>
+
+         <div class="col-sm-3">
+          <div class="form-group">
+            <label>Project</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="project_title" (keyUp)="listProjects($event)"
+              placeholder="Select Project" [(ngModel)]="project_id" optId="project_id" [item]="projects">
+            </auto-completen>
+          </div>
+         </div>
+
+         <div class="col-sm-3">
+          <div class="form-group">
+            <label>State</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+              placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id" [item]="circles">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+            <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+              placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">Year</label>
+            <input type="number" class="form-control" [(ngModel)]="yyyy">
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">Month</label>
+            <input type="number" class="form-control" [(ngModel)]="mm">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="text-centre">
+        <button type="submit" class="btn btn-success" (click)="listVehicle()">Search</button>&nbsp;&nbsp;
+        <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <p *ngIf="listvehicles">Total Records Found:{{listvehicles[1].total}}</p>
+      <div class="row">
+        <div class="col-sm-6">
+          <nav *ngIf="pager" aria-label="Page navigation example">
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+              <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                  (click)="page=1;getlist();">First</a></li>
+              <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                  (click)="page=page-1;getlist();">Previous</a></li>
+              <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                  [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a>
+              </li>
+              <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                  (click)="page=page+1;getlist();">Next</a></li>
+              <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                  (click)="page=pager.totalPages;getlist();">Last</a></li>
+            </ul>
+          </nav>
+        </div>
+        <label>show</label>
+        <div class="col-sm-4">
+          <select [(ngModel)]="limit" (change)="listVehicle()" class="form-control"
+            style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="25">150</option>
+            <option value="50">200</option>
+            <option value="100">250</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success" (click)="download()">Download</button>
+      </div>
+      <div class="card-body" style="text-align: center;">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead style="background-color: rgb(235, 216, 65);">
+              <tr>
+                <!-- <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);" rowspan="2">Action</th> -->
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Project Name</th>
+                 <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Vehicle No</th>
+                 <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Company Name</th>
+                 <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Vehicle Type</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">State</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">District</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Jio Centre Name</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Acting Driver</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Company Driver Name</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Driver Mob No</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Year</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Month</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 1</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 2</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 3</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 4</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 5</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 6</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 7</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 8</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 9</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 10</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 11</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 12</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 13</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 14</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 15</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 16</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 17</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 18</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 19</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 20</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 21</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 22</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 23</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 24</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 25</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 26</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 27</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 28</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 29</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 30</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);" colspan="3">Day 31</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Total</th>
+                <th style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);"
+                  rowspan="2">Activity</th>
+              </tr>
+              <tr>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Start Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Stop Km</th>
+                <th style="border: 1px solid #000000;color: rgb(0, 0, 0);">Running Kms</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="listvehicles">
+              <tr *ngFor="let items of listvehicles[0]">
+                <!-- <td class="overflow-hidden">
+                                    <div ngbDropdown container="body"> -->
+                <!-- <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                                        <div ngbDropdownMenu>
+                                            <button ngbDropdownItem [routerLink]="['/pages/DailyKmUpdate/adddailykm']"
+                                                [queryParams]="{vehicle_km_id:items.vehicle_km_id}"
+                                                [skipLocationChange]="true">Edit</button> 
+                                         </div>-->
+                <!-- </div>
+                                </td> -->
+                <td>{{items.project_title}}</td>
+                <td>{{items.regno}}</td>
+                <td>{{items.company_name}}</td>
+                <td>{{items.vehicle_type}}</td>
+                <td>{{items.statename}}</td>
+                <td>{{items.distname}}</td>
+                <td>{{items.jcname}}</td>
+                <td>{{items.acting_driver}}</td>
+                <td>{{items.emp_id}}</td>
+                <td>{{items.mobile_no}}</td>
+                <td>{{items.year}}</td>
+                <td>{{items.mm}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.one_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.one_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.one_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.two_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.two_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.two_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.three_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.three_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.three_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.four_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.four_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.four_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.five_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.five_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.five_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.six_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.six_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.six_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seven_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seven_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seven_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eight_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eight_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eight_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nine_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nine_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nine_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.ten_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.ten_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.ten_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eleven_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eleven_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eleven_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twelve_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twelve_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twelve_km}}</td>
+                 <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fourteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fourteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fourteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fifteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fifteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.fifteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.sixteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.sixteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.sixteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seventeen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seventeen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.seventeen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eighteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eighteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.eighteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nineteen_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nineteen_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.nineteen_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twenty_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twenty_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twenty_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyone_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyone_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyone_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentytwo_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentytwo_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentytwo_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentythree_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentythree_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentythree_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfour_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfour_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfour_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfive_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfive_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyfive_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentysix_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentysix_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentysix_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyseven_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyseven_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyseven_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyeight_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyeight_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentyeight_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentynine_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentynine_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.twentynine_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirty_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirty_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirty_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirtyone_open}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirtyone_close}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #000000;color: rgb(0, 0, 0);">
+                  {{items.thirtyone_km}}</td>
+                <td style="padding-bottom:30px; width:100px; border: 1px solid #c31717;color: rgb(218, 6, 6);">
+                   {{items.totrunkm}}</td>
+                <td>{{items.activity}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="table-wrapper">
+    <table class="table table-hover table-striped">
+      <tr>
+        <th rowspan="2" style="border: 3px solid #aeb8b9;color: white;">
+          <br>
+          Action
+        </th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2" *ngIf="role.getroleid()>777"><br>AccNO</th>
+        <th style="border: 3px solid #aeb8b9!important;color: white;border-collapse: separate;" colspan="2">Status
+        </th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2" *ngIf="role.getroleid()>549"><br>Reseller Name
+        </th>
+        <th style="border: 3px solid #aeb8b9;color: white;" colspan="3">Subscriber</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" *ngIf="dashstatus==2||on_status==1" rowspan="2"><br>IP
+          Address</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" *ngIf="dashstatus==2||on_status==1" rowspan="2"><br>MAC
+        </th>
+        <th style="border: 3px solid #aeb8b9;color: white;" colspan="3">Service</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2">Subplan</th>
+
+        <th style="border: 3px solid #aeb8b9;color: white;" colspan="3">Time</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" colspan="3">Limit</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2" *ngIf="dashstatus==2||on_status==1"><br>Nas IP
+        </th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2"><br>Expiry Date</th>
+         <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2" [hidden]="dashstatus==2||on_status==1">
+          <br>Mobile Number</th> -->
+<!-- <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2"><br>Branch</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2"><br>Locality</th>
+        <th style="border: 3px solid #aeb8b9;color: white;" rowspan="2"><br>Connection Type</th> -->
+<!-- </tr>
+      <tr style="background-color :  #01a7ee;color:white;position: sticky;top: 38px;">
+        <th style="border: 3px solid #aeb8b9;">Account </th>
+        <th style="border: 3px solid #aeb8b9;">Connection </th>
+        <th style="border: 3px solid #aeb8b9;"> Login ID</th>
+        <th style="border: 3px solid #aeb8b9;"> Name</th>
+        <th style="border: 3px solid #aeb8b9;"> Mobile</th>
+        <th style="border: 3px solid #aeb8b9;"> Type </th>
+        <th style="border: 3px solid #aeb8b9;">Assigned </th>
+        <th style="border: 3px solid #aeb8b9;color: white;">Running </th>
+        <th style="border: 3px solid #aeb8b9;">Start</th>
+        <th style="border: 3px solid #aeb8b9;">Online</th>
+        <th style="border: 3px solid #aeb8b9;color: white;">Last Log-Off</th>
+        <th style="border: 3px solid #aeb8b9;">D/L </th>
+        <th style="border: 3px solid #aeb8b9;">U/L </th>
+        <th style="border: 3px solid #aeb8b9;">Total </th>
+      </tr>
+      <tr *ngFor="let item of pagedItems">
+        <td *ngIf="!role.getmenurole(703) ||!role.getmenurole(704) || !role.getmenurole(705)||!role.getmenurole(1032)"
+          style=" padding: 1px;" class=" last" data-title="'Action'">
+          <div class="dropdown ghost-dropdown" ngbDropdown>
+            <button style="width: 70px;border: 2px solid #73a1ff;font-size: 10px;margin:3px;"
+              class="btn btn-primary btn-icon" type="button" ngbDropdownToggle>Action&nbsp;
+            </button>
+            <ul style="width: 75px;margin:3px;z-index: 1;" class="dropdown-menu" ngbDropdownMenu>
+              <li *ngIf="!role.getmenurole(704)" class="dropdown-item" title="View"
+                style="padding-top: 0px;padding-bottom: 2px;" (click)="view_user(item.uid)"><i
+                  style="font-size: 20px;" class="far fa-eye "></i>&nbsp;View</li>
+              <li *ngIf="(item.acc_type!=3 && (!role.getmenurole(705)))" style="padding-top: 0px;padding-bottom: 2px;"
+                class="dropdown-item" title="Renew"
+                (click)="renew_user(item.uid,item.mrole,item.createdon,item.expiration)">
+                <i style="font-size: 20px;" class="fa fa-redo "></i>&nbsp;Renew
+              </li>
+              <li *ngIf="!role.getmenurole(703)" style="padding-top: 0px;padding-bottom: 2px;"
+                [hidden]="role.getroleid()==666||role.getroleid()==555" class="dropdown-item" title="Edit"
+                (click)="Edit_nas(item.uid)">
+                <i style="font-size: 20px;" class="nb-edit"></i>&nbsp;Edit
+              </li>
+              <li *ngIf="!role.getmenurole(1032)" style="padding-top: 0px;padding-bottom: 2px;" class="dropdown-item"
+                title="ChangePassword" (click)="propassword(item.uid)"><i style="font-size: 20px;"
+                  class="fa fa-keyboard"></i>&nbsp;Password
+              </li>
+              <li *ngIf="item.online_status==1 || dashstatus == 7 || on_status == 3"
+                style="padding-top: 0px;padding-bottom: 2px;" class="dropdown-item" title="CloseSession"
+                (click)="close(item.uid)"><i style="font-size: 20px;" class="fa fa-power-off"></i>&nbsp;CloseSesn
+              </li>
+              <li *ngIf="item.online_status==1 || dashstatus == 7 || on_status == 3"
+                style="padding-top: 0px;padding-bottom: 2px;" class="dropdown-item" title="Log-Off"
+                (click)="logoff(item.uid)"><i style="font-size: 20px;" class="fa fa-pause-circle"></i>&nbsp;Log-Off
+              </li>
+            </ul>
+          </div>
+        </td> -->
+<!-- <td *ngIf="role.getroleid()>777">{{item.uid}}</td>
+        <td (click)="view_user(item.uid)" style="cursor: pointer;">
+          <span *ngIf="((item.expiry_status==0) && (item.status!=3 && item.status!=2))"
+            style="background-color:#ff9900; color: #fafffb;font-weight:bold;border-radius: 3px; padding: 4px;">Expired</span>
+          <span
+            *ngIf="(((item.online_status==0||item.online_status==1) && item.expiry_status==1)&&(item.status!=3 && item.status!=2))"
+            style="background-color:#0380fc;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Active</span>
+          <span *ngIf="item.status==2"
+            style="background-color:#df2727;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Suspend</span>
+          <span *ngIf="item.status==3"
+            style="background-color:#f700ffe1;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Hold</span>
+        </td>
+        <td (click)="view_user(item.uid)" style="cursor: pointer;">
+          <span *ngIf="item.online_status==1 && item.expired_online ==0"
+            style="background-color:#1ac43c;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Online</span>
+          <span *ngIf="item.online_status==0 && item.expired_online ==0"
+            style="background-color:#565656;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Offline</span>
+          <span *ngIf="item.online_status==0 && item.expired_online ==1"
+            style="background-color:#7b878d;font-weight:bold;border-radius: 3px; padding: 4px; color: #fafffb">Offline</span>
+        </td>
+        <td *ngIf="role.getroleid()>549">{{item.company}}</td>
+        <td style="text-transform: none !important;text-align: left;">
+          <a><i
+              [ngClass]="{'fas fa-user':item.acctype!=1? true:false,'fa fa-address-book': item.acctype==1 ? true:false  }">
+            </i>&nbsp;{{item.cust_profile_id}}</a>
+        </td>
+        <td>{{item.cust_name}}</td> -->

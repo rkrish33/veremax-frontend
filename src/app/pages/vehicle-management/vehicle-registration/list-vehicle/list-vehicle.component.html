@@ -1,0 +1,212 @@
+<div class="col-sm-16">
+  <div class="card" style="background-color:rgb(255, 255, 255) ;">
+    <div class="card-header" style="background-color:rgb(255, 255, 255) ;">
+        <button type="submit" style="float:left ;" class="btn btn-success" (click)="btnClick()">Add</button>
+        <button type="submit" style="float:right;" class="btn btn-success"(click)="Download()">Export</button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Vehicle Registration No</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="regno" (keyUp)="registration_no($event)"
+              placeholder="Select Registration No" [(ngModel)]="regNo" optId="id" [item]="registno">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>State</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+              placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id" [item]="circles">
+            </auto-completen>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+            <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+              placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+            </auto-completen>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Department</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="vehicle_type" (keyUp)="vehicleType($event)"
+              placeholder="Select Department" [(ngModel)]="dept" optId="vehicle_id" [item]="vehicletypes">
+            </auto-completen>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="text-centre">
+            <button type="submit" class="btn btn-success" (click)="listVehicle()">Search</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+      <div class="card-body">
+        <button hidden id="modelOpenButton" data-toggle="modal" data-target="#myModal">Add</button>
+        <p *ngIf="listvehicles">Total Records Found:{{listvehicles[1].total}}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <nav *ngIf="pager" aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=1;getlist();">First</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=page-1;getlist();">Previous</a></li>
+                <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=page+1;getlist();">Next</a></li>
+                <li class="page-item"> <a class="page-link"
+                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+              </ul>
+            </nav>
+          </div>
+          <label>Show</label>
+          <div class="col-sm-3">
+            <select [(ngModel)]="limit" (change)="listVehicle()" class="form-control"
+              style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="25">150</option>
+              <option value="50">200</option>
+              <option value="100">250</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="text-align: center;">
+          <div class="table-responsive">
+            <table class="table table-striped mb-0">
+              <thead style="background-color: rgb(235, 216, 65);">
+                <tr>
+                  <th>Action</th>
+                  <th>Registration NO</th>
+                  <th>Engine No</th>
+                  <th>Chassis No</th>
+                  <th>Company Name</th>
+                  <th>Registration Date</th>
+                  <th>Registration Expiry Date</th>
+                  <th>Vehicle Type</th>
+                  <th>Fuel Card No</th>
+                  <th>Maker Name</th>
+                  <th>State</th>
+                  <th>District</th>
+                  <th>Fc Expiry Date</th>
+                  <th>FC Expiry Status</th>
+                  <th>Permit Expiry Date</th>
+                  <th>Permit Expiry Status</th>
+                  <th>Pollution Expiry Date</th>
+                  <th>Pollution Expiry Status</th>
+                  <th>Insurance Expiry Date</th>
+                  <th>Insurance Status</th>
+                  <th>Remarks</th>
+                  <th>Updated By</th>
+                  <th>Updated Date</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="count1">
+                <tr *ngFor="let items of count1">
+                  <td class="overflow-hidden">
+                    <div ngbDropdown container="body">
+                      <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                      <div ngbDropdownMenu>
+                        <button ngbDropdownItem (click)="modelOpen(items.id)">Add</button>
+                        <button ngbDropdownItem [routerLink]="['/pages/Vehicle/Vehicle_Management/addvehicle']"
+                          [queryParams]="{id:items.id}" [skipLocationChange]="true">Edit</button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{items.regno}}</td>
+                  <td>{{items.engine_Number}}</td>
+                  <td>{{items.chasis_number}}</td>
+                  <td>{{items.company_name}}</td>
+                  <td>{{items.regdate | date:"yyyy-MM-dd"}}</td>
+                  <td>{{items.regexpdate | date:"yyyy-MM-dd"}}</td>
+                  <td>{{items.vehicle_type}}</td>
+                  <td>{{items.cardno}}</td>
+                  <td>{{items.makers_name}}</td>
+                  <td>{{items.statename}}</td>
+                  <td>{{items.distname}}</td>
+                  <td>{{items.fcexpdate | date:"yyyy-MM-dd"}}</td>
+                  <td><span class="badge py-1" [ngClass]="{
+                    'badge-soft-success': items.fc_status === 'Active',
+                    'badge-soft-danger': items.fc_status === 'Expired' }">{{ items.fc_status }}</span></td>
+
+                  <td>{{items.permitexpiry | date:"yyyy-MM-dd"}}</td>
+
+                  <td><span class="badge py-1" [ngClass]="{
+                    'badge-soft-success': items.permit_status === 'Active',
+                    'badge-soft-danger': items.permit_status === 'Expired' }">{{ items.permit_status }}</span></td>
+
+                  <td>{{items.vpcdate | date:"yyyy-MM-dd"}}</td>
+
+
+
+                  <td><span class="badge py-1" [ngClass]="{
+                    'badge-soft-success': items.vp_status === 'Active',
+                    'badge-soft-danger': items.vp_status === 'Expired' }">{{ items.vp_status }}</span></td>
+
+                  <td>{{items.viexpdate | date:"yyyy-MM-dd"}}</td>
+
+
+                  <td><span class="badge py-1" [ngClass]="{
+                    'badge-soft-success': items.insurance_status === 'Active',
+                    'badge-soft-danger': items.insurance_status === 'Expired' }">{{ items.insurance_status }}</span>
+                  </td>
+
+                  <td>{{items.remarks}}</td>
+                  <td>{{items.firstname}}</td>
+                  <td>{{items.cdate | date:"yyyy-MM-dd"}}</td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal" id="myModal" *ngIf="editId">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" style="text-align: centre;">Update Vehicle Documents</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <app-update-documents [editId]="editId"></app-update-documents>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #smallDataModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Vehicle Registration bulk</h5>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-hidden="true">×</button>
+    </div>
+    <div class="modal-body">
+      <p> this is veremax</p>
+          <br>
+          <div class="col-sm-6">
+            <div class="text-centre">
+                <button type="submit" class="btn btn-success" (click)="approvalStatus()">Submit</button>&nbsp;&nbsp;
+            </div>
+        </div>
+    </div>
+  </ng-template>

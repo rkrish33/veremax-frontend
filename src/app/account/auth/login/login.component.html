@@ -1,0 +1,108 @@
+<div class="card">
+  <div class="account-pages my-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-10">
+          <div class="card-body p-0" style="margin-left: 200px;">
+            <div class="row">
+              <div class="col-md-6 p-5">
+                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                <div class="bg-text">
+                  <form class="authentication-form" name="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+                    novalidate>
+                    <ngb-alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</ngb-alert>
+                    <div class="mx-auto mb-5 ">
+                      <a routerLink="/">
+                        <!-- <h3 style="text-align:center; text-decoration: underline; color:rgb(0, 0, 0);">Veremax</h3> -->
+                      </a>
+                    </div>
+                     <div class="form-group ">
+                      <label class="form-control-label" style="color: rgb(0, 0, 0);">User Login Type</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="icon-dual" style="-color: rgb(0, 0, 0);"
+                              data-feather="arrow-right-circle" appFeatherIcon></i>
+                          </span>
+                        </div>
+                        <select class="form-control" formControlName="logintype"
+                          [ngClass]="{'is-invalid': submit && f.logintype.errors}">
+                          <option value="">Select User Type</option>
+                          <option value="1">Management</option>
+                          <option value="2">Vehicle Management</option>
+                          <option value="3">Claim Management</option>
+                          <option value="4">MEPT Login</option>
+                          <option value="5">Rental Management</option>
+                        </select>
+                        <div *ngIf="submitted && f.logintype.errors" class="invalid-feedback">
+                          <div *ngIf="f.logintype.errors.required">Login Type Is Required</div>
+                        </div>
+                      </div>
+                    </div> 
+
+                    <div class="form-group">
+                      <label class="form-control-label" style="color:rgb(0, 0, 0);">User Name</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="icon-dual" data-feather="mail" appFeatherIcon></i>
+                          </span>
+                        </div>
+                        <input type="text" class="form-control" formControlName="Username" placeholder="User Name"
+                          [ngClass]="{ 'is-invalid': submitted && f.Username.errors }" required />
+                        <div *ngIf="submitted && f.Username.errors" class="invalid-feedback">
+                          <div *ngIf="f.Username.errors.required">Username Is Required</div>
+                        </div>
+                      </div>
+                     </div>
+
+                    <div class="form-group mt-4">
+                      <label class="form-control-label" style="color:rgb(0, 0, 0);">Password</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i data-feather="lock" class="icon-dual" appFeatherIcon></i>
+                          </span>
+                        </div>
+                        <input [type]="changetype?'password':'text'" formControlName="Password" class="form-control"
+                          [ngClass]="{ 'is-invalid': submitted && f.Password.errors }" placeholder="Enter your Password"
+                          required />
+                        <span class="eyeicon" (click)="viewpassword()"><i
+                            [ngClass]="visible?'fa fa-eye':'fa fa-eye-slash'"></i></span>
+                        <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
+                          <div *ngIf="f.Password.errors.required">Password is required</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="checkbox-signin" checked>
+                        <label class="custom-control-label" for="checkbox-signin"
+                          style="color: rgb(0, 0, 0);">Remember
+                          me</label>
+                        <a routerLink="/account/reset-password" class="float-right text-muted">Forgot
+                          password</a>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group mb-0 text-center">
+                      <button class="btn btn-primary btn-block" type="submit">Log In
+                      </button>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-12 text-left">
+                        <p style="color:rgb(0, 0, 0);">Don't have an account?<a routerLink="/account/signup"
+                            class="text-primary font-weight-bold ml-1" style="color: rgba(24, 124, 69, 0.386);">Sign Up</a></p>
+                      </div> <!--end col -->
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div> <!--end card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

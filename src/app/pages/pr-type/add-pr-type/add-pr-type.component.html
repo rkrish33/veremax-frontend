@@ -1,0 +1,29 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{prtypeid ?"Edit":"Add"}}PR TYPE</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="prtypeform" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>PR Type Name</label>
+              <input type="text" class="form-control" formControlName="prname"
+                placeholder="Enter PR Name" [ngClass]="{'is-invalid': submit && form.prname.errors}">
+              <div *ngIf="submit && form.prname.errors" class="invalid-feedback">
+                <span *ngIf="form.prname.errors.required">Pls fill PR type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{prtypeid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(prtypeform)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

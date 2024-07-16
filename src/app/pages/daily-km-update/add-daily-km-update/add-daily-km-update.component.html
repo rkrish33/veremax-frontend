@@ -1,0 +1,275 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="header-title mt-0">{{vehId ? "EDIT":"ADD" }} TRIP SHEET</h1>
+    </div>
+    <form [formGroup]="dailyKmUpdateForm" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row" style="margin: 0.1 px; max-width: 900px;">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Create Type<span style="color: rgb(235, 12, 12);">*</span></label>
+              <select class="form-control" formControlName="create_type" (changed)="bulkvalid()">
+                <option value="1">Individual</option>
+                <option value="2">Bulk</option>
+              </select>
+              <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                <span *ngIf="form.create_type.errors.required"> Create Type Required!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="form['create_type'].value=='2'">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <a href="\assets\public\Vehicle_tracker.xlsx" target="_blank" download><b
+                    style="color: blue;">DOWNLOAD
+                    SAMPLE HERE</b></a>
+              </div>
+            </div>
+            <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+              <div class="col-sm-8">
+                <input #myFile type="file" (change)="changeListener($event.target.files[0])" class="form-control"
+                  accept=".xlsx" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="form['create_type'].value=='1'">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Date</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input type="date" class="form-control" formControlName="date"
+                [ngClass]="{'is-invalid': submit && form.date.errors}">
+              <div *ngIf="submit && form.date.errors" class="invalid-feedback">
+                <span *ngIf="form.date.errors.required">Select Date</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Project</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.project.invalid&&submit}"
+                optValues="project_title" (keyUp)="listProjects($event)" (changed)="registration_no()"
+                placeholder="Select " formControlName="project" optId="project_id" [item]="projects">
+              </auto-completen>
+              <div *ngIf="submit && form.project.errors" class="invalid-feedback">
+                <span *ngIf="form.project.errors.required">Please Select Project Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Vehicle Registration No</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.regNo.invalid&&submit}"
+                optValues="regno" (keyUp)="registration_no($event)" placeholder="Select Registration No"
+                formControlName="regNo" optId="vehicle_id" [item]="registno" (changed)="getStartKm($event)">
+              </auto-completen>
+              <div *ngIf="submit && form.regNo.errors" class="invalid-feedback">
+                <span *ngIf="form.regNo.errors.required">Please Select Vehicle No </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class=" form-group">
+              <label>Starting km</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input (input)="onCheckOpeningKm()" type="text" class="form-control" formControlName="opening_km"
+                placeholder="Enter Start Km"
+                [ngClass]="{'is-invalid': (submit && form.opening_km.errors) || form.opening_km.errors?.message}">
+              <div *ngIf="submit && form.opening_km.errors" class="invalid-feedback">
+                <span *ngIf="form.opening_km.errors.required">Enter Start Km</span>
+                <span *ngIf="form.opening_km.errors.message">{{form.opening_km.errors.message}}</span>
+              </div>
+              <div *ngIf="form.opening_km.errors" class="invalid-feedback">
+                <span>{{form.opening_km.errors?.message}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="vehId">
+            <div class=" form-group">
+              <label>Stop km</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input type="text" class="form-control" formControlName="closing_km" placeholder="Enter Stop Km"
+                [ngClass]="{'is-invalid': submit && form.closing_km.errors}">
+              <div *ngIf="submit && form.closing_km.errors" class="invalid-feedback">
+                <span *ngIf="form.closing_km.errors.required">Enter Stop Km</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Company Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.companyname.invalid&&submit}"
+                optValues="company_name" (keyUp)="companyname($event)" placeholder="Select Company Name"
+                formControlName="companyname" optId="company_id" [item]="companynames">
+              </auto-completen>
+              <div *ngIf="submit && form.companyname.errors" class="invalid-feedback">
+                <span *ngIf="form.companyname.errors.required">Please Select Company Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="form['companyname'].value=='4'">
+            <div class="form-group">
+              <label>Vendor Name</label>
+              <input type="text" class="form-control" formControlName="vendorname" placeholder="Enter Vendor Name"
+                [ngClass]="{'is-invalid': submit && form.vendorname.errors}">
+              <div *ngIf="submit && form.vendorname.errors" class="invalid-feedback">
+                <span *ngIf="form.vendorname.errors.required">VendorName</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Type Of Vehicle</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <select class="form-control" formControlName="vehicletype"
+                [ngClass]="{'is-invalid': submit && form.vehicletype.errors}">
+                <option value="">Select Vehicle Type</option>
+                <option *ngFor="let items of vehicletypes" [ngValue]='items.vehicle_id'>{{items.vehicle_type}}
+                </option>
+              </select>
+              <div *ngIf="submit && form.vehicletype.errors" class="invalid-feedback">
+                <span *ngIf="form.vehicletype.errors.required">Please slect the Vehicle Type</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Driver</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <select class="form-control" formControlName="driver"
+                [ngClass]="{ 'is-invalid': submit && form.driver.errors }">
+                <option value="">Select Driver Type</option>
+                <option value="1">Company Driver</option>
+                <option value="2">Acting Driver</option>
+              </select>
+              <div *ngIf="submit && form.driver.errors" class="invalid-feedback">
+                <span *ngIf="form.driver.errors.required">Please Select Driver Type</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-4" *ngIf="form['driver'].value=='1'">
+            <div class="form-group">
+              <label>Driver Name</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.drivername.invalid&&submit}"
+                optValues="full_name" (keyUp)="listemployee($event)" placeholder="Select Employee ID"
+                formControlName="drivername" optId="emp_id_pk" [item]="employeename">
+              </auto-completen>
+              <div *ngIf="submit && form.drivername.errors" class="invalid-feedback">
+                <span *ngIf="form.drivername.errors.required">Select Employee ID </span>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-sm-4" *ngIf="form['driver'].value=='1'">
+            <div class="form-group">
+              <label>Company Driver Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input type="text" class="form-control" formControlName="drivername" placeholder="Driver Name"
+                [ngClass]="{'is-invalid': submit && form.drivername.errors}">
+              <div *ngIf="submit && form.drivername.errors" class="invalid-feedback">
+                <span *ngIf="form.drivername.errors.required">Please Enter Driver Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="form['driver'].value=='2'">
+            <div class="form-group">
+              <label>Acting Driver Name</label>
+              <input type="text" class="form-control" formControlName="act_driver" placeholder="Acting Driver Name"
+                [ngClass]="{'is-invalid': submit && form.act_driver.errors}">
+              <div *ngIf="submit && form.act_driver.errors" class="invalid-feedback">
+                <span *ngIf="form.act_driver.errors.required">Driver Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Driver Mobile Number</label>
+              <input type="text" class="form-control" formControlName="mobile_no" placeholder="Enter Mobile Number"
+                [ngClass]="{'is-invalid': submit && form.mobile_no.errors}">
+              <div *ngIf="submit && form.mobile_no.errors" class="invalid-feedback">
+                <span *ngIf="form.mobile_no.errors.required">Please Enter Mobile No</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>KiloMeter</label>
+                            <select class="form-control" formControlName="km"
+                                [ngClass]="{ 'is-invalid': submit && form.km.errors }">
+                                <option value="">Select the Payment to</option>
+                                <option value="1">START</option>
+                                <option value="2">STOP</option>
+                            </select>
+                            <div *ngIf="submit && form.km.errors" class="invalid-feedback">
+                                <span *ngIf="form.km.errors.required">Please Select payment to</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                     <div class="col-sm-4">
+                        <div class=" form-group">
+                            <label>Stop km</label>
+                            <input type="text" class="form-control" formControlName="closing_km"
+                                placeholder="Enter Stop Km"
+                                [ngClass]="{'is-invalid': submit && form.closing_km.errors}">
+                            <div *ngIf="submit && form.closing_km.errors" class="invalid-feedback">
+                                <span *ngIf="form.closing_km.errors.required">Enter Stop Km</span>
+                            </div>
+                        </div>
+                    </div> -->
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="Circle stats">State</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':form.circle_name.invalid && submit}"
+                optValues="name" (keyUp)="circle($event)" (changed)="changeCluster()" placeholder="Select State"
+                formControlName="circle_name" Id="id" [item]="circles">
+              </auto-completen>
+              <div *ngIf="submit && form.circle_name.errors" class="invalid-feedback">
+                <span *ngIf="form.circle_name.errors.required">Circle type is required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.cluster.invalid && submit}"
+                optValues="name" (keyUp)="changeCluster($event)" placeholder="Select District" formControlName="cluster"
+                optId="id" [item]="clusters">
+              </auto-completen>
+              <div *ngIf="submit && form.cluster.errors" class="invalid-feedback">
+                <span *ngIf="form.cluster.errors.required">Please Select Cluster</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Jio Center Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input type="text" class="form-control" formControlName="jcname" placeholder="Enter Jio Center Name"
+                [ngClass]="{'is-invalid': submit && form.jcname.errors}">
+              <div *ngIf="submit && form.jcname.errors" class="invalid-feedback">
+                <span *ngIf="form.jcname.errors.required">Please Enter JC Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Activity</label>
+              <textarea type="text" class="form-control" formControlName="activity" placeholder="Enter Activity"
+                [ngClass]="{'is-invalid': submit && form.activity.errors}"></textarea>
+              <div *ngIf="submit && form.activity.errors" class="invalid-feedback">
+                <span *ngIf="form.activity.errors.required">Please Enter Activity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{vehId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="reset" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

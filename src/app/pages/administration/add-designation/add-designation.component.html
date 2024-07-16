@@ -1,0 +1,42 @@
+<div class="col-sm-9">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Add Employee Designation</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="EmployeeDesignationForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Employee Department</label>
+                <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_deptid.invalid&&submit}"
+                  optValues="depname" (keyUp)="listempdepartment($event)" placeholder="Select Employee Department"
+                  formControlName="emp_deptid" optId="id" [item]="empdepartment">
+                </auto-completen>
+                <div *ngIf="submit && form.emp_deptid.errors" class="invalid-feedback">
+                  <span *ngIf="form.emp_deptid.errors.required">Please Select Employee Depatment </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Add Employee Designation</label>
+                <input type="text" class="form-control" formControlName="emp_designation" placeholder="Enter Employee Designation"
+                  [ngClass]="{'is-invalid': submit && form.emp_designation.errors}">
+                <div *ngIf="submit && form.emp_designation.errors" class="invalid-feedback">
+                  <span *ngIf="form.emp_designation.errors.required">Pls Fill Service Item</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(EmployeeDesignationForm)" class="btn btn-danger">Reset</button>
+          </div>
+          </form>
+      </div>
+    </div>
+    </div>
+  
+  
+  

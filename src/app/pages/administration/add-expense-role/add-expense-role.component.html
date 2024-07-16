@@ -1,0 +1,133 @@
+<div class="col-md-12">
+    <div class="card">
+      <!-- <toaster-container></toaster-container> -->
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Role Details</h4>
+      </div>
+      <form [formGroup]="expeenseForm" class="form-horizontal" (ngSubmit)="onSubmit();">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Expense Id</label><label style="color: red;">*</label>
+                    <select class="form-control" formControlName="expeenseid"
+                    [ngClass]="{'is-invalid':submit && f.expeenseid.errors}">
+                    <option value=''>Select the expeenseid</option>
+                    <!-- <option *ngFor="let items of expeenseids" [ngValue]="items.expeenseid_id_pk">{{items.expeenseid_name}}</option> -->
+                     </select> 
+                     <div *ngIf="submit && f.expeenseid.errors" class="invalid-feedback">
+                      <span *ngIf="f.expeenseid.errors.required">Expeenseid File is required</span>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Manager Name</label><label style="color: red;">*</label>
+                    <select class="form-control" formControlName="manager"
+                    [ngClass]="{'is-invalid':submit && f.manager.errors}">
+                    <option value=''>Select the manager</option>
+                    <!-- <option *ngFor="let items of managers" [ngValue]="items.manager_id_pk">{{items.manager_name}}</option> -->
+                     </select> 
+                   <div *ngIf="submit && f.manager.errors" class="invalid-feedback">
+                   <span *ngIf="f.manager.errors.required">Manager Name is required</span>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          <ngb-tabset type="pills" justify="justified" class="navtab-bg nav-justified"
+            style="background-color: rgb(255, 123, 0);">
+            <ngb-tab title="Scope">
+              <ng-template ngbTabContent class="nav-item">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Expense</label><label style="color: red;">*</label>
+                      <input type="text" class="form-control" formControlName="expense" placeholder="Enter Expense"
+                       [ngClass]="{'is-invalid': submit && f.expense.errors}">
+                       <div *ngIf="submit && f.expense.errors" class="invalid-feedback">
+                        <span *ngIf="f.expense.errors.required">Enter Expense</span>
+                       </div> 
+                    </div>  
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Upload File</label><label style="color: red;">*</label>
+                      <input type="file" class="form-control" formControlName="bill"
+                        [ngClass]="{'is-invalid': submit && f.bill.errors}">
+                        <div *ngIf="submit && f.bill.errors" class="invalid-feedback">
+                          <span *ngIf="f.bill.errors.required">Bil File is required</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Project">
+              <ng-template ngbTabContent class="nav-item">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Expense</label><label style="color: red;">*</label>
+                      <input type="text" class="form-control" formControlName="expense" placeholder="Enter Expense"
+                       [ngClass]="{'is-invalid': submit && f.expense.errors}">
+                       <div *ngIf="submit && f.expense.errors" class="invalid-feedback">
+                        <span *ngIf="f.expense.errors.required">Enter Expense</span>
+                       </div> 
+                    </div>  
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Upload File</label><label style="color: red;">*</label>
+                      <input type="file" class="form-control" formControlName="bill"
+                        [ngClass]="{'is-invalid': submit && f.bill.errors}">
+                        <div *ngIf="submit && f.bill.errors" class="invalid-feedback">
+                          <span *ngIf="f.bill.errors.required">Bil File is required</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Out Scope">
+                <ng-template ngbTabContent class="nav-item">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Expense</label><label style="color: red;">*</label>
+                        <input type="text" class="form-control" formControlName="expense" placeholder="Enter Expense"
+                         [ngClass]="{'is-invalid': submit && f.expense.errors}">
+                         <div *ngIf="submit && f.expense.errors" class="invalid-feedback">
+                          <span *ngIf="f.expense.errors.required">Enter Expense</span>
+                         </div> 
+                      </div>  
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Upload File</label><label style="color: red;">*</label>
+                        <input type="file" class="form-control" formControlName="bill"
+                          [ngClass]="{'is-invalid': submit && f.bill.errors}">
+                          <div *ngIf="submit && f.bill.errors" class="invalid-feedback">
+                            <span *ngIf="f.bill.errors.required">Bil File is required</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                 
+                </ng-template>
+              </ngb-tab>
+          </ngb-tabset>
+        </div>
+  
+        <div class="card-footer">
+  
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Submit</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(expeenseForm)" class="btn btn-danger">Reset</button>
+          </div>
+  
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  

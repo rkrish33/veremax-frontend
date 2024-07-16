@@ -1,0 +1,106 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="header-title mt-0">Search</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="area">Project Name</label>
+            <input type="search" class="form-control" [(ngModel)]="projectname" (keyup)="listproject()"
+              placeholder="Enter Project Name">
+          </div>
+        </div>
+        <!-- <div class="col-sm-5">
+          <div class="form-group">
+            <label for="area">Client Name</label>
+            <input type="search" class="form-control" [(ngModel)]="clientname" (keyup)="listproject()"
+              placeholder="Enter Client Name">
+          </div>
+        </div> -->
+
+
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" (click)="onSubmit()">Search</button>&nbsp;&nbsp;
+      <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+    </div><br><br>
+  </div>
+
+
+
+  <div class="card-body">
+    <p *ngIf="data">Total Records Found:{{data[1].total}}</p>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <nav *ngIf="pager" aria-label="Page navigation example">
+          <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                (click)="page=1;getlist();">First</a></li>
+            <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                (click)="page=page-1;getlist();">Previous</a></li>
+            <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+            <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                (click)="page=page+1;getlist();">Next</a></li>
+            <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                (click)="page=pager.totalPages;getlist();">Last</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <label>show</label>
+      <div class="col-sm-3">
+        <select [(ngModel)]="limit" (change)="listproject()" class="form-control"
+          style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:50px;border-radius: 5px;">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success" (click)="download()">DownLoad Excel</button>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped mb-0">
+
+          <thead style="background-color:rgb(189, 204, 186);">
+            <tr>
+              <th>Action</th>
+              <th>Client Name</th>
+              <th>Project Name</th>
+              <th>Project Code</th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="data">
+            <tr *ngFor="let lists of pagedItems">
+              <td class="overflow-hidden">
+                <div ngbDropdown container="body">
+                  <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                  <div ngbDropdownMenu>
+                    <button ngbDropdownItem [routerLink]="['/pages/administration/add-project']"
+                      [queryParams]="{id:lists.vuid}" [skipLocationChange]="true">Edit</button>
+                    <button ngbDropdownItem>View</button>
+                    <!-- <button ngbDropdownItem (click)="delete(lists.vuid)">Delete</button> -->
+                  </div>
+                </div>
+              </td>
+              <td>{{lists.client_name}}</td>
+              <td>{{lists.project_title}}</td>
+              <td>{{lists.project_code}}</td>
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>

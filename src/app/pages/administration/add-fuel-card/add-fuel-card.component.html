@@ -1,0 +1,38 @@
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{fuelcardid ?"Edit":"Add"}} Expense Type</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="fuelcardForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Fuel Card Number</label>
+                <input type="text" class="form-control" formControlName="cardno"
+                  placeholder="Fuelcard Number" [ngClass]="{'is-invalid': submit && form.cardno.errors}">
+                <div *ngIf="submit && form.cardno.errors" class="invalid-feedback">
+                  <span *ngIf="form.cardno.errors.required">Enter FuelCard Number</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-6">
+          <div class="form-group">
+            <label for="input1" class="col-sm-6">
+              <span class="h6 small bg-white text-muted pt-1 pl-2 pr-2">Fuelcard</span> 
+            </label>
+            <input type="text" class="form-control mt-n3" id="input1" value="Enter Fuelcard NO">
+          </div>
+          </div> -->
+          <div class="card-footer">
+            <div style="text-align: center;">
+              <button type="submit" class="btn btn-success">{{fuelcardid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+              <button type="button" (click)="onReset(fuelcardForm)" class="btn btn-danger">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

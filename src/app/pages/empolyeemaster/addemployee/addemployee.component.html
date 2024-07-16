@@ -1,0 +1,557 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">EMPLOYEE MASTER</h4>
+    </div>
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <ngb-tabset type="pills" justify="justified" class="navtab-bg nav-justified" style="background-color: aqua;">
+          <ngb-tab title="Basic Details">
+            <ng-template ngbTabContent class="nav-item">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Empolyee Id:</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <input type="text" class="form-control" formControlName="employee_id"
+                      placeholder="Enter employee id" [ngClass]="{'is-invalid': submit && form.employee_id.errors}">
+                    <div *ngIf="submit && form.employee_id.errors" class="invalid-feedback">
+                      <span *ngIf="form.employee_id.errors.required">Please Enter the Employee Id.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Role:</label>
+                    <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':employeeForm.controls.employeerole.invalid&&submit}"
+                      optValues="role_name" (keyUp)="listDropDown($event)" (changed)="getRoleData()"
+                      placeholder="Select Role" formControlName="employeerole" optId="role_id_pk" [item]="Roles">
+                    </auto-completen>
+                    <!-- <select class="form-control" formControlName="role" (change)="getMenurole()">
+                      <option value=''>Select the Role</option>
+                      <option *ngFor="let items of Roles" [ngValue]="items.role_id_pk">{{items.role_name}}</option>
+                    </select> -->
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>User Code</label>
+                    <input type="text" class="form-control" formControlName="usercode" placeholder="Enter User Code"
+                      [ngClass]="{'is-invalid': submit && form.usercode.errors}">
+                    <div *ngIf="submit && form.usercode.errors" class="invalid-feedback">
+                      <span *ngIf="form.usercode.errors.required">Enter User Code</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>User Name</label>
+                    <input type="text" class="form-control" formControlName="username" placeholder="Enter User Name"
+                      [ngClass]="{'is-invalid': submit && form.username.errors}">
+                    <div *ngIf="submit && form.username.errors" class="invalid-feedback">
+                      <span *ngIf="form.username.errors.required">Enter User name</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" formControlName="usr_password"
+                      placeholder="Enter Password" [ngClass]="{'is-invalid': submit && form.usr_password.errors}">
+                    <div *ngIf="submit && form.usr_password.errors" class="invalid-feedback">
+                      <span *ngIf="form.usr_password.errors.required">Enter Password</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label> Confirm Password</label>
+                    <input type="password" class="form-control" formControlName="cpassword"
+                      placeholder="Enter Confirm Password" [ngClass]="{'is-invalid': submit && form.cpassword.errors}">
+                    <div *ngIf="submit && form.cpassword.errors" class="invalid-feedback">
+                      <span *ngIf="form.cpassword.errors.required">Enter Confirm Password</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>First Name </label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <input type="text" class="form-control" formControlName="fst_name" placeholder="Enter The fst_name"
+                      [ngClass]="{'is-invalid': submit && form.fst_name.errors}">
+                    <div *ngIf="submit && form.fst_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.fst_name.errors.required">Please Enter firstname</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" formControlName="lst_name" placeholder="Enter The lst_name "
+                      [ngClass]="{'is-invalid': submit && form.lst_name.errors}">
+                    <div *ngIf="submit && form.lst_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.lst_name.errors.required">Please Select The lastname </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Employee Type</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <select class="form-control" formControlName="emp_type"
+                      [ngClass]="{'is-invalid': submit && form.emp_type.errors}">
+                      <option value="">Select The Employee type</option>
+                      <option *ngFor="let items of employeetypes" [ngValue]="items.empay_type_id_pk">
+                        {{items.empay_type_name}}</option>
+                    </select>
+                    <div *ngIf="submit && form.emp_type.errors" class="invalid-feedback">
+                      <span *ngIf="form.emp_type.errors.required">Please Select The employeetype </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4" *ngIf="form['emp_type'].value=='2'">
+                  <div class="form-group">
+                    <label>Sub-Employee Type</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <select class="form-control" formControlName="sub_emp"
+                      [ngClass]="{'is-invalid': submit && form.sub_emp.errors}">
+                      <option value="">Select The Sub-Employee type</option>
+                      <option *ngFor="let items of Subemployeetypes" [ngValue]="items.sub_empay_type_id_pk">
+                        {{items.sub_empay_type_name}}</option>
+                    </select>
+                    <div *ngIf="submit && form.sub_emp.errors" class="invalid-feedback">
+                      <span *ngIf="form.sub_emp.errors.required">Please Select The employeetype </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Employee Department</label>
+                    <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_deptid.invalid&&submit}"
+                      optValues="depname" (keyUp)="listempdepartment($event)" (changed)="listempdesignation()" placeholder="Select Employee Department"
+                      formControlName="emp_deptid" optId="id" [item]="empdepartment">
+                    </auto-completen>
+                    <div *ngIf="submit && form.emp_deptid.errors" class="invalid-feedback">
+                      <span *ngIf="form.emp_deptid.errors.required">Please Select Employee Department </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Employee Designation</label>
+                    <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.emp_desid.invalid&&submit}"
+                      optValues="desname" (keyUp)="listempdesignation($event)" placeholder="Select Employee Designation"
+                      formControlName="emp_desid" optId="id" [item]="empdesignation">
+                    </auto-completen>
+                    <div *ngIf="submit && form.emp_desid.errors" class="invalid-feedback">
+                      <span *ngIf="form.emp_desid.errors.required">Please Select Employee Designation </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Work Experience</label>
+                    <select class="form-control" formControlName="work_exp"
+                      [ngClass]="{'is-invalid': submit && form.work_exp.errors}">
+                      <option value="">Select The Option</option>
+                      <option value="1">Fresher</option>
+                      <option value="2">Experience</option>
+                    </select>
+                    <div *ngIf="submit && form.work_exp.errors" class="invalid-feedback">
+                      <span *ngIf="form.work_exp.errors.required">Please Select The work experience </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4" *ngIf="form['work_exp'].value=='2'">
+                  <div class="form-group">
+                    <label>Years Of Experience</label>
+                    <input type="text" class="form-control" formControlName="experienc_yrs"
+                      placeholder="Enter the Working Experience"
+                      [ngClass]="{'is-invalid': submit && form.experienc_yrs.errors}">
+                    <div *ngIf="submit && form.experienc_yrs.errors" class="invalid-feedback">
+                      <span *ngIf="form.experienc_yrs.errors.required">Please Select The projectname </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Client</label>
+                    <auto-completen
+                      [addclass]="{' form-control' : true,'form-control-danger':employeeForm.controls.client.invalid&&submit}"
+                      optValues="client_name" (keyUp)="listclient($event)" placeholder="Select client"
+                      formControlName="client" optId="client_id" [item]="clients">
+                    </auto-completen>
+                    <div *ngIf="submit && form.client.errors" class="invalid-feedback">
+                      <span *ngIf="form.client.errors.required">Please Select The client </span>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Project Name</label>
+                    <auto-completen
+                      [addclass]="{' form-control' : true,'form-control-danger':employeeForm.controls.projectname.invalid&&submit}"
+                      optValues="project_title" (keyUp)="project($event)" placeholder="Select Project Name"
+                      formControlName="projectname" optId="project_id" [item]="projects" (changed)="getProjectData()">
+                    </auto-completen>
+                    <div *ngIf="submit && employeeForm.controls.projectname.errors" class="invalid-feedback">
+                      <span *ngIf="employeeForm.controls.projectname.errors.required">Please Select The projectname
+                      </span>
+                    </div>
+                  </div>
+                  <!-- <div class="form-group">
+                    <auto-completen
+                      [addclass]="{' form-control' : true,'form-control-danger':employeeForm.controls.role.invalid&&submit}"
+                      optValues="lableValue" placeholder="Select Level Name" formControlName="role" optId="levelid"
+                      [item]="projectData">
+                    </auto-completen>
+                  </div> -->
+                </div>
+                <!-- <div class="form-group">
+                    <auto-completen
+                    [addclass]="{' form-control' : true}"
+                    optValues="desc_name" placeholder="Select Role Name" disabled
+                    formControlName="role" optId="levelid" [item]="projectData">
+                  </auto-completen>
+                 </div> -->
+
+                <!-- <div class="col-sm-12" *ngIf="projectData?.length!=0">
+                    <div class="table-responsive">
+                      <table class="table table-striped mb-0">
+                        <thead  style="background-color:rgb(186, 199, 204);" *ngIf="projectData">
+                          <tr>
+                            <th>Level Id</th>
+                            <th>Level Name</th>
+                            <th>Designation Name</th>
+                            <th>Claim Amount</th>
+                          </tr>
+                          </thead>
+                          <tbody >
+                          <tr *ngFor="let items of projectData">
+                            <td>{{items.levelid}}</td>
+                            <td>{{items.level_name}}</td>
+                            <td>{{items.desc_name}}</td>
+                            <td>{{items.claim_amt_limit}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                     </div>
+                    </div> -->
+
+                <!-- {{projectData | json}} -->
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Login type</label>
+                    <select class="form-control" formControlName="logintype" [ngClass]="{'is-invalid': submit && form.logintype.errors}">
+                      <option value="">Select User Type</option>
+                      <option value="1">Management</option>
+                      <option value="2">Vehicle Management</option>
+                      <option value="3">Claim Management</option>
+                      <option value="4">MEPT Login</option>
+                      <option value="5">Rental Management</option>
+                    </select>
+                    <div *ngIf="submit && form.logintype.errors" class="invalid-feedback">
+                      <span *ngIf="form.logintype.errors.required">Please Select The Employee Type </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label> MEPT State</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <auto-completen
+                      [addclass]="{' form-control' : true,'form-control-danger':form.state.invalid&&submit}"
+                      optValues="name" (keyUp)="liststate($event)" (changed)="changeCluster()"
+                      placeholder="Select State" formControlName="state" Id="id" [item]="states">
+                    </auto-completen>
+                    <div *ngIf="submit && form.state.errors" class="invalid-feedback">
+                      <span *ngIf="form.state.errors.required">Please Select The state </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>MEPT District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':form.district.invalid && submit}"
+                      optValues="name" (keyUp)="changeCluster($event)" placeholder="Select district"
+                      formControlName="district" optId="id" [item]="clusters">
+                    </auto-completen>
+                    <div *ngIf="submit && form.district.errors" class="invalid-feedback">
+                      <span *ngIf="form.district.errors.required">Please Select Cluster</span>
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <!-- Basic End -->
+
+          <ngb-tab title="Personal Details">
+            <ng-template ngbTabContent class="nav-item">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" class="form-control" formControlName="birth"
+                      [ngClass]="{'is-invalid': submit && form.birth.errors}">
+                    <div *ngIf="submit && form.birth.errors" class="invalid-feedback">
+                      <span *ngIf="form.birth.errors.required">Please Enter DOB</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Date of Joing</label>
+                    <input type="date" class="form-control" formControlName="joining"
+                      [ngClass]="{'is-invalid': submit && form.joining.errors}">
+                    <div *ngIf="submit && form.joining.errors" class="invalid-feedback">
+                      <span *ngIf="form.joining.errors.required">Enter DOJ</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Mobile Number</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <input type="text" class="form-control" formControlName="mobile_no" placeholder="Enter mobile_no "
+                      [ngClass]="{'is-invalid': submit && form.mobile_no.errors}">
+                    <div *ngIf="submit && form.mobile_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.mobile_no.errors.required">Enter mobile number</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Email</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <input type="email" class="form-control" formControlName="email_id" placeholder="Enter email_id"
+                      [ngClass]="{'is-invalid': submit && form.email_id.errors}">
+                    <div *ngIf="submit && form.email_id.errors" class="invalid-feedback">
+                      <span *ngIf="form.email_id.errors.required">Please Enter Email</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Emergency no</label>
+                    <input type="text" class="form-control" formControlName="emergency_no"
+                      placeholder="Enter The Number" [ngClass]="{'is-invalid': submit && form.emergency_no.errors}">
+                    <div *ngIf="submit && form.emergency_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.emergency_no.errors.required">Enter Emergency No </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Present Address</label>
+                    <textarea class="form-control" formControlName="present_addr"
+                      placeholder="Enter The Present Address"
+                      [ngClass]="{'is-invalid': submit && form.present_addr.errors}"></textarea>
+
+                    <div *ngIf="submit && form.present_addr.errors" class="invalid-feedback">
+                      <span *ngIf="form.present_addr.errors.required">Please Enter the Present Address</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Permanent Address</label>
+                    <textarea class="form-control" formControlName="permanent_addr"
+                      placeholder="Enter The Permanent Address"
+                      [ngClass]="{'is-invalid': submit && form.permanent_addr.errors}"></textarea>
+
+                    <div *ngIf="submit && form.permanent_addr.errors" class="invalid-feedback">
+                      <span *ngIf="form.permanent_addr.errors.required">Please Enter the Permanent Address</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>PAN No</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <input type="text" class="form-control" formControlName="pan_no"
+                      [ngClass]="{'is-invalid': submit && form.pan_no.errors}">
+                    <div *ngIf="submit && form.pan_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.pan_no.errors.required">Enter PAN No </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>GST No</label>
+                    <input type="text" class="form-control" formControlName="gst_no"
+                      [ngClass]="{'is-invalid': submit && form.gst_no.errors}">
+                    <div *ngIf="submit && form.gst_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.gst_no.errors.required">Enter GST No </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <!-- Personal details  End-->
+
+          <ngb-tab title="Bank Detail">
+            <ng-template ngbTabContent class="nav-item">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" class="form-control" formControlName="bank_name"
+                      placeholder="Enter The bank_name" [ngClass]="{'is-invalid': submit && form.bank_name.errors}">
+                    <div *ngIf="submit && form.bank_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.bank_name.errors.required">Enter The Bank name</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" class="form-control" formControlName="acnt_name"
+                      placeholder="Enter The acnt_name" [ngClass]="{'is-invalid': submit && form.acnt_name.errors}">
+                    <div *ngIf="submit && form.acnt_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.acnt_name.errors.required">Enter The Account NAme</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" class="form-control" formControlName="acnt_no"
+                      placeholder="Enter The Accountname" [ngClass]="{'is-invalid': submit && form.acnt_no.errors}">
+                    <div *ngIf="submit && form.acnt_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.acnt_no.errors.required">Enter Account No</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Branch Address</label>
+                    <textarea type="text" class="form-control" formControlName="bank_branch"
+                      placeholder="Enter Your bank_branch"
+                      [ngClass]="{'is-invalid': submit && form.bank_branch.errors}"></textarea>
+                    <div *ngIf="submit && form.bank_branch.errors" class="invalid-feedback">
+                      <span *ngIf="form.bank_branch.errors.required">Enter The Branch Address</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="ifsc_Code" class="form-control" formControlName="ifsc_no" placeholder="Enter IFSC Code"
+                      [ngClass]="{'is-invalid': submit && form.ifsc_no.errors}">
+                    <div *ngIf="submit && form.ifsc_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.ifsc_no.errors.required">Enter The IFSC Code</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>MICF Code</label>
+                    <input type="ifsc_Code" class="form-control" formControlName="micf_code"
+                      placeholder="Enter micf_code Code" [ngClass]="{'is-invalid': submit && form.micf_code.errors}">
+                    <div *ngIf="submit && form.micf_code.errors" class="invalid-feedback">
+                      <span *ngIf="form.micf_code.errors.required">Enter The MICF Code</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Other Bank Name</label>
+                    <input type="text" class="form-control" formControlName="other_acnt_name"
+                      placeholder="Enter The Other bankname"
+                      [ngClass]="{'is-invalid': submit && form.other_acnt_name.errors}">
+                    <div *ngIf="submit && form.other_acnt_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.other_acnt_name.errors.required">Enter The Bank name</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Other Bank A/c No</label>
+                    <input type="text" class="form-control" formControlName="otherbnk_acnt_no"
+                      placeholder="Enter Your OtherBANK A/c No"
+                      [ngClass]="{'is-invalid': submit && form.otherbnk_acnt_no.errors}">
+                    <div *ngIf="submit && form.otherbnk_acnt_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.otherbnk_acnt_no.errors.required">Enter The Other Banka/c no</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Other Bank A/c Address</label>
+                    <textarea type="text" class="form-control" formControlName="otherbank_addr"
+                      placeholder="Enter Your otherbank_addr"
+                      [ngClass]="{'is-invalid': submit && form.otherbank_addr.errors}"></textarea>
+                    <div *ngIf="submit && form.otherbank_addr.errors" class="invalid-feedback">
+                      <span *ngIf="form.otherbank_addr.errors.required">Enter The otherbankaddress Address</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label> Other Bank IFSC Code</label>
+                    <input type="ifsc_Code" class="form-control" formControlName="other_ifsc_no"
+                      placeholder="Enter  other IFSC Code"
+                      [ngClass]="{'is-invalid': submit && form.other_ifsc_no.errors}">
+                    <div *ngIf="submit && form.other_ifsc_no.errors" class="invalid-feedback">
+                      <span *ngIf="form.other_ifsc_no.errors.required">Enter The other IFSC Code</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <!--bank details end -->
+
+          <ngb-tab title="Documents">
+            <ng-template ngbTabContent class="nav-item">
+              <div>
+                <h6>Upload documents</h6>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Document Type</label>
+                    <select class="form-control" formControlName="status" (change)="changedoctype()"
+                      [ngClass]="{'is-invalid': submit && form.status.errors}">
+                      <option value="">Select the Document Type</option>
+                      <option *ngFor="let items of doctypes" [ngValue]="items.doc_type_id_pk">{{items.doc_name}}
+                      </option>
+
+                      <div *ngIf="submit && form.status.errors" class="invalid-feedback">
+                        <span *ngIf="form.status.errors.required">select the document type</span>
+                      </div>
+
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Choose a File</label>
+                    <input type="file" class="form-control" formControlName="fname"
+                      (change)="upload($event.target.files[0])" [ngClass]="{'is-invalid':submit && form.fname.errors}">
+                    <div *ngIf="submit && form.fname.errors" class="invalid-feedback">
+                      <span *ngIf="form.fname.errors.required">choose a file</span>
+                    </div>
+                    <img *ngFor="let url of imageURL" [src]="url" style="width: 100%;height: 150px">
+                  </div>
+                </div>
+              </div>
+
+
+            </ng-template>
+
+          </ngb-tab>
+
+        </ngb-tabset>
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{dataID ? "Update":"Sumbit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(employeeForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+

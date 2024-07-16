@@ -1,0 +1,29 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{expid ?"Edit":"Add"}} Expense Type</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Expense Type Name</label>
+              <input type="text" class="form-control" formControlName="expensetype_name"
+                placeholder="Enter expensetype_name" [ngClass]="{'is-invalid': submit && form.expensetype_name.errors}">
+              <div *ngIf="submit && form.expensetype_name.errors" class="invalid-feedback">
+                <span *ngIf="form.expensetype_name.errors.required">Pls fill Expense type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{expid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(expenseForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

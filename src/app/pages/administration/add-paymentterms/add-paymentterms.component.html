@@ -1,0 +1,30 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{payid ?"Edit":"Add"}} Payment Terms</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="paytermsForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Payment Terms</label>
+              <input type="text" class="form-control" formControlName="paymonths"
+                placeholder="Enter Payment Terms" [ngClass]="{'is-invalid': submit && form.paymonths.errors}">
+              <div *ngIf="submit && form.paymonths.errors" class="invalid-feedback">
+                <span *ngIf="form.paymonths.errors.required">Pls fill Payment Terms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{payid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(paytermsForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

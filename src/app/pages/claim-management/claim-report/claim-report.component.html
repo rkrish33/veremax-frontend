@@ -1,0 +1,140 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="header-title mt-0">LIST EMPLOYEE CLAIM</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Project</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="project_title"
+                            (keyUp)="listProjects($event)" placeholder="Select Project" [(ngModel)]="project_id"
+                            optId="project_id" [item]="projects">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Employee ID</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="emp_id"
+                            placeholder="Select Employee ID" [(ngModel)]="empid"
+                            optId="emp_id_pk" [item]="employeeList">
+                        </auto-completen>
+                    </div>
+                </div>
+           
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>State</label>
+                    <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+                        placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id"
+                        [item]="circles">
+                    </auto-completen>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                    <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+                    placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+                    </auto-completen>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="text-centre">
+                <button type="submit" class="btn btn-success" (click)="listEmpClaims()">Search</button>&nbsp;&nbsp;
+                <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <p *ngIf="listClaimData">Total Records Found:{{listClaimData[1].total}}</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <nav *ngIf="pager" aria-label="Page navigation example">
+                        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                            <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=1;getlist();">First</a></li>
+                            <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=page-1;getlist();">Previous</a></li>
+                            <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=page+1;getlist();">Next</a></li>
+                            <li class="page-item"> <a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <label>Show</label>
+                <div class="col-sm-4">
+                    <select [(ngModel)]="limit" (change)="listEmpClaims()" class="form-control"
+                        style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="25">150</option>
+                        <option value="50">200</option>
+                        <option value="100">250</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success" (click)="download()">Download</button>
+            </div>
+            <div class="card-body" style="text-align: center;">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead style="background-color: rgb(235, 216, 65);">
+                            <tr>
+                                <!-- <th>Action</th> -->
+                                <th>Project Name</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Type</th>
+                                <th>Activity</th>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Service Start Date</th>
+                                <th>Service End Date</th>
+                                <th>Claim Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listClaimData">
+                            <tr *ngFor="let items of listClaimData[0]">
+                                <!-- <td class="overflow-hidden">
+                                    <div ngbDropdown container="body">
+                                        <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                                        <div ngbDropdownMenu>
+                                            <button ngbDropdownItem
+                                                [routerLink]="['/pages/Claim/Claim_Management/addempclaim']"
+                                                [queryParams]="{clmid:items.id}">Edit</button>
+                                        </div>
+                                    </div>
+                             </td> -->
+                                <td>{{items.project_title}}</td>
+                                <td>{{items.emp_id}}</td>
+                                <td>{{items.full_name}}</td>
+                                <td>{{items.depname}}</td>
+                                <td>{{items.desname}}</td>
+                                <td>{{items.prsmname}}</td>
+                                <td>{{items.activity == 0 ? "O&M" : items.activity == 2 ? "Project": "Others"}}</td>
+                                <td>{{items.state_name}}</td>
+                                <td>{{items.dist_name}}</td>
+                                <td>{{items.servicesdate | date:"yyyy-MM-dd"}}</td>
+                                <td>{{items.serviceedate | date:"yyyy-MM-dd"}}</td>
+                                <td>{{items.approval_status == 0 ? "Pending" : items.approval_status == 1 ? "Approved L1" : items.approval_status == 2 ? " Approved L2" : items.approval_status == 3 ? "Approved Final" : "Rejected" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

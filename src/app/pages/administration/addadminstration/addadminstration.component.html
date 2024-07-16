@@ -1,0 +1,54 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0"> {{id ?"Edit":"Add"}} State and District</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="stateform" (ngSubmit)="onSubmit()">
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>State</label>
+              <auto-completen
+              [addclass]="{'form-control' : true,'form-control-danger':stateform.controls.state_id.invalid&&submit}"
+              optValues="state_name" (keyUp)="liststate($event);" (changed)="changeCity();"
+              placeholder="Select Circle" formControlName="state_id" optId="state_mas_id" [item]="states">
+            </auto-completen>
+              <!-- <select class="form-control" formControlName="state_id"
+                [ngClass]="{'is-invalid': submit && form.state_id.errors}">
+                <option value="" selected>Select The state </option>
+                <option *ngFor="let items of statesnames" [ngValue]="items.state_mas_id">{{items.state_name}}</option>
+              </select> -->
+              <div *ngIf="submit && form.state_id.errors" class="invalid-feedback">
+                <span *ngIf="form.state_id.errors.required">Please Select The state </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>District</label>
+              <input type="text" class="form-control" formControlName="district_name"
+                placeholder="Enter Your district Name" [ngClass]="{'is-invalid': submit && form.district_name.errors}">
+              <div *ngIf="submit && form.district_name.errors" class="invalid-feedback">
+                <span *ngIf="form.district_name.errors.required">Please Type the District Name</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Add</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(stateform)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

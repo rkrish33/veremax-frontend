@@ -1,0 +1,64 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{catid ?"Edit":"Add"}} Category</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="catForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Category</label>
+              <input type="text" class="form-control" formControlName="category_name" placeholder="Enter category_name"
+                [ngClass]="{'is-invalid': submit && form.category_name.errors}">
+              <div *ngIf="submit && form.category_name.errors" class="invalid-feedback">
+                <span *ngIf="form.category_name.errors.required">Pls fill Category Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Process Type</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <select class="form-control" formControlName="processtype"
+                [ngClass]="{'is-invalid': submit && form.processtype.errors}">
+                <option value="">Select The Process Type </option>
+                <option value="1">Service </option>
+                <option value="2">Material</option>
+              </select>
+              <div *ngIf="submit && form.processtype.errors" class="invalid-feedback">
+                <span *ngIf="form.processtype.errors.required">Please Select Process Type</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea type="text" class="form-control" formControlName="description" placeholder="description"></textarea>
+                <!-- [ngClass]="{'is-invalid': submit && form.description.errors}"> -->
+              <!-- <div *ngIf="submit && form.description.errors" class="invalid-feedback">
+                <span *ngIf="form.description.errors.required">description</span>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>Code</label>
+              <input type="text" class="form-control" formControlName="category_code" placeholder="Code"
+                [ngClass]="{'is-invalid': submit && form.category_code.errors}">
+              <div *ngIf="submit && form.category_code.errors" class="invalid-feedback">
+                <span *ngIf="form.category_code.errors.required">Type The Code</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{catid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(catForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

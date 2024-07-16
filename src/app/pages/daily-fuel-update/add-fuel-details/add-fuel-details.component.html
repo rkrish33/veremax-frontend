@@ -1,0 +1,97 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="header-title mt-0">{{topUpId ? "Edit":"Add"}}Fuel Details</h1>
+        </div>
+        <form [formGroup]="fueltopupform" (ngSubmit)="onSubmit()">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Vehicle Registration No</label>
+                            <auto-completen
+                                [addclass]="{' form-control' : true,'form-control-danger':form.vehicle_id.invalid&&submit}"
+                                optValues="regno" (keyUp)="registration_no($event)" placeholder="Select Registration No"
+                                formControlName="vehicle_id" optId="id" [item]="registno">
+                            </auto-completen>
+                            <div *ngIf="submit && form.vehicle_id.errors" class="invalid-feedback">
+                                <span *ngIf="form.vehicle_id.errors.required">Please Select The Vehicle No </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Fuel Litres</label>
+                            <input type="text" class="form-control" formControlName="fuel_litre"
+                                placeholder="Enter Fuel Quantity"
+                                [ngClass]="{'is-invalid': submit && form.fuel_litre.errors}">
+                            <div *ngIf="submit && form.fuel_litre.errors" class="invalid-feedback">
+                                <span *ngIf="form.fuel_litre.errors.required">Fuel In Litres
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input type="text" class="form-control" formControlName="vftup_amt"
+                                placeholder="Enter Fuel Amount"
+                                [ngClass]="{'is-invalid': submit && form.vftup_amt.errors}">
+                            <div *ngIf="submit && form.vftup_amt.errors" class="invalid-feedback">
+                                <span *ngIf="form.vftup_amt.errors.required">Enter Fuel Amount</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Runned Kms</label>
+                            <input type="text" class="form-control" formControlName="cur_km"
+                                placeholder="Enter kms Driven"
+                                [ngClass]="{'is-invalid': submit && form.cur_km.errors}">
+                            <div *ngIf="submit && form.cur_km.errors" class="invalid-feedback">
+                                <span *ngIf="form.cur_km.errors.required">Enter Driven Kms
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Payment Mode</label>
+                            <select class="form-control" formControlName="pay_mode"
+                                [ngClass]="{'is-invalid': submit && form.pay_mode.errors}">
+                                <option value="">Select Payment Mode</option>
+                                <option value="1">Cash</option>
+                                <option value="2">Credit Card</option>
+                                <option value="3">Debit Card</option>
+                                <option value="4">UPI</option>
+                                <option value="5">Fuel Card</option>
+                            </select>
+                            <div *ngIf="submit && form.pay_mode.errors" class="invalid-feedback">
+                                <span *ngIf="form.pay_mode.errors.required">Please slect the Fuel Type</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" *ngIf="form['pay_mode'].value=='5'">
+                        <div class="form-group">
+                            <label>FuelCard No</label>
+                            <auto-completen
+                                [addclass]="{' form-control' : true,'form-control-danger':form.fuel_cardno.invalid&&submit}"
+                                optValues="cardno" (keyUp)="fuelcard_no($event)" placeholder="Select Fuelcard No"
+                                formControlName="fuel_cardno" optId="id" [item]="fuelcard">
+                            </auto-completen>
+                            <div *ngIf="submit && form.fuel_cardno.errors" class="invalid-feedback">
+                                <span *ngIf="form.fuel_cardno.errors.required">Select Fuelcard No </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-success">{{topUpId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+                    <button type="button" (click)="onReset(fueltopupform)" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

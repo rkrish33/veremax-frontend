@@ -1,0 +1,30 @@
+<div class="col-sm-9">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0">{{id?"Edit":"Add"}}Employee Department</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="EmployeeDepartmentForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>Add Employee Department</label>
+                <input type="text" class="form-control" formControlName="emp_department" placeholder="Enter Employee Department"
+                  [ngClass]="{'is-invalid': submit && form.emp_department.errors}">
+                <div *ngIf="submit && form.emp_department.errors" class="invalid-feedback">
+                  <span *ngIf="form.emp_department.errors.required">Please Enter Employee Department</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(EmployeeDepartmentForm)" class="btn btn-danger">Reset</button>
+          </div>
+          </form>
+      </div>
+    </div>
+    </div>
+  
+  
+  

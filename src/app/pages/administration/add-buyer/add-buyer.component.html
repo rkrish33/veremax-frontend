@@ -1,0 +1,99 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0"> {{buyid ?"Edit":"Add"}} Buyer</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="buyerForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Buyer Name</label>
+              <input type="text" class="form-control" formControlName="buyer_name" placeholder="Enter buyer_name"
+                [ngClass]="{'is-invalid': submit && form.buyer_name.errors}">
+              <div *ngIf="submit && form.buyer_name.errors" class="invalid-feedback">
+                <span *ngIf="form.buyer_name.errors.required">Pls fill Category Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Company Name</label>
+              <textarea type="text" class="form-control" formControlName="cmpnyname" placeholder="cmpnyname"
+                [ngClass]="{'is-invalid': submit && form.cmpnyname.errors}"></textarea>
+              <div *ngIf="submit && form.cmpnyname.errors" class="invalid-feedback">
+                <span *ngIf="form.cmpnyname.errors.required">description</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group"> 
+              <label>Register Address</label>
+              <textarea type="text" class="form-control"  formControlName="regisaddress" placeholder="regisaddress"
+                [ngClass]="{'is-invalid': submit && form.regisaddress.errors}"></textarea>
+              <div *ngIf="submit && form.regisaddress.errors" class="invalid-feedback">
+                <span *ngIf="form.regisaddress.errors.required">regisaddress</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>Shipment Address</label>
+              <input type="text" class="form-control" formControlName="shipmentaddress" placeholder="Code"
+                [ngClass]="{'is-invalid': submit && form.shipmentaddress.errors}">
+              <div *ngIf="submit && form.shipmentaddress.errors" class="invalid-feedback">
+                <span *ngIf="form.shipmentaddress.errors.required">codee</span>
+              </div>
+            </div>
+          </div> 
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>PAN no</label>
+              <input type="text" class="form-control" formControlName="panno" placeholder="Code"
+                [ngClass]="{'is-invalid': submit && form.panno.errors}">
+              <div *ngIf="submit && form.panno.errors" class="invalid-feedback">
+                <span *ngIf="form.panno.errors.required">codee</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>GST no</label>
+              <input type="text" class="form-control" formControlName="gstno" placeholder="Code"
+                [ngClass]="{'is-invalid': submit && form.gstno.errors}">
+              <div *ngIf="submit && form.gstno.errors" class="invalid-feedback">
+                <span *ngIf="form.gstno.errors.required">codee</span>
+              </div>
+            </div>
+          </div>
+       
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>State</label>
+            <select class="form-control" formControlName="state_id"
+              [ngClass]="{'is-invalid': submit && form.state_id.errors}">
+              <option value="" selected>Select The state</option>
+              <option *ngFor="let items of states" [ngValue]="items.state_mas_id">{{items.state_name}}</option>
+            </select>
+            <div *ngIf="submit && form.state_id.errors" class="invalid-feedback">
+              <span *ngIf="form.state_id.errors.required">Please Select The state </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <i [attr.data-feather]="'trash'" class="menu-icon" appFeatherIcon></i>
+ 
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{buyid ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(buyerForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+  
+

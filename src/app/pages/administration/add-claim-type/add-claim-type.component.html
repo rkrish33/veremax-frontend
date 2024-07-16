@@ -1,0 +1,49 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0"> {{id ?"Edit":"Add"}} Claim Type</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="claimForm" (ngSubmit)="onSubmit()">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Payment Type</label>
+                <select class="form-control"  formControlName="paytype_id"
+                  [ngClass]="{'is-invalid': submit && form.paytype_id.errors}">
+                  <option value="">Select Payment Type</option>
+                  <option value="1">Advance</option>
+                  <option value="2">Expense</option>
+                </select>
+                <div *ngIf="submit && form.paytype_id.errors" class="invalid-feedback">
+                  <span *ngIf="form.paytype_id.errors.required">Please slect the Payment Type</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Claim Type</label>
+                <input type="text" class="form-control" formControlName="claimname"
+                  placeholder="Enter Your claimname Name" [ngClass]="{'is-invalid': submit && form.claimname.errors}">
+                <div *ngIf="submit && form.claimname.errors" class="invalid-feedback">
+                  <span *ngIf="form.claimname.errors.required">Please fill the claim Type</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(claimForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+

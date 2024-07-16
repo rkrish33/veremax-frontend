@@ -1,0 +1,191 @@
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="header-title mt-0">TRIP SHEET LIST</h2>
+      </div>
+      <div class="card-body">
+
+        <div class="row">
+          <!-- <div class="col-sm-4">
+            <div class="form-group">
+                <label>Room Id</label>
+                <auto-completen
+                    [addclass]="{' form-control' : true,'form-control-danger':form.room_id.invalid&&submit}"
+                    optValues="roomid" placeholder="Select Project Name" (changed)="listProjects()"
+                    formControlName="room_id" optId="roomid" [item]="advance_rent">
+                </auto-completen>
+                <div *ngIf="submit && form.room_id.errors" class="invalid-feedback">
+                    <span *ngIf="form.room_id.errors.required">Select Room ID</span>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Room Id</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="roomid" (keyUp)="listrent($event)"
+              placeholder="Select RoomId" [(ngModel)]="room_id" optId="roomid" [item]="rentid">
+            </auto-completen>
+          </div>
+         </div>
+
+  
+           <div class="col-sm-3">
+            <div class="form-group">
+              <label>Project</label>
+              <auto-completen [addclass]="{'form-control': true}" optValues="project_title" (keyUp)="listProjects($event)"
+                placeholder="Select Project" [(ngModel)]="project_id" optId="project_id" [item]="projects">
+              </auto-completen>
+            </div>
+           </div>
+  
+           <div class="col-sm-3">
+            <div class="form-group">
+              <label>State</label>
+              <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+                placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id" [item]="circles">
+              </auto-completen>
+            </div>
+          </div>
+  
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+                placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+              </auto-completen>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+      <div class="col-sm-4">
+        <div class="text-centre">
+          <button type="submit" class="btn btn-success" (click)="rentReport()">Search</button>&nbsp;&nbsp;
+          <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+        </div>
+      </div>
+  
+      <div class="card-body">
+        <p *ngIf="rentalreport">Total Records Found:{{rentalreport[1].total}}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <nav *ngIf="pager" aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=1;getlist();">First</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=page-1;getlist();">Previous</a></li>
+                <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a>
+                </li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=page+1;getlist();">Next</a></li>
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+              </ul>
+            </nav>
+          </div>
+          <label>show</label>
+          <div class="col-sm-4">
+            <select [(ngModel)]="limit" (change)="rentReport()" class="form-control"
+              style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="25">150</option>
+              <option value="50">200</option>
+              <option value="100">250</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success" (click)="download()">Download</button>
+        </div>
+        <div class="card-body" style="text-align: center;">
+          <div class="table-responsive">
+            <table class="table table-striped mb-0">
+              <thead style="background-color: rgb(235, 216, 65);">
+                <tr>
+                  <th>Owner Name</th>
+                  <th>Owner Adress</th>
+                  <th>Rental Adress</th>
+                  <th>Room Category</th>
+                  <th>Project</th>
+                  <th>Advance Amount</th>
+                  <th>Monthly Rent</th>
+                  <th>Owner Mail</th>
+                  <th>Owner Phone</th>
+                  <th>Owner Aadhar</th>
+                  <th>State</th>
+                  <th>District</th>
+                  <th>Sublocation</th>
+                  <th>Rent Active Date</th>
+                  <th>Rent Closing Date</th>
+                  <th>Agreement Active Date</th>
+                  <th>Agreement Expiry Date</th>
+                  <th>Agreement Status</th>
+                  <th>Approval Manager</th>
+                  <th>Rent Type</th>
+                  <th>Room ID</th>
+                  <th>Project</th>
+                  <th>Monthly Rent Paid</th>
+                  <th>Advance Amount Paid</th>
+                  <th>State</th>
+                  <th>District</th>
+                  <th>Paid Date</th>
+                  <th>Payment Mode</th>
+                  <th>UTR No</th>
+                  <th>Cheque No</th>
+                  <th>Pay To</th>
+                  <th>Brokerage Amount</th>
+                  <th>Advance Recovery Amount</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="rentalreport">
+                <tr *ngFor="let items of rentalreport[0]">
+                  <td>{{items.owner_name}}</td>
+                  <td>{{items.owner_address}}</td>
+                  <td>{{items.rent_address}}</td>
+                  <td>{{items.room_category_name}}</td>
+                  <td>{{items.project_title}}</td>
+                  <td>{{items.advance_amt}}</td>
+                  <td>{{items.rent_amt}}</td>
+                  <td>{{items.owner_mail}}</td>
+                  <td>{{items.owner_mobile}}</td>
+                  <td>{{items.owner_aadhar}}</td>
+                  <td>{{items.state_name}}</td>
+                  <td>{{items.district}}</td>
+                  <td>{{items.sub_location}}</td>
+                  <td>{{items.start_date}}</td>
+                  <td>{{items.end_date}}</td>
+                  <td>{{items.agr_start_date}}</td>
+                  <td>{{items.agr_end_date}}</td>
+                  <td>{{items.agr_status}}</td>
+                  <td>{{items.approvalname}}</td>
+                  <td>{{items.renttype == 1 ? "Rent": "Advance"}}</td>
+                  <td>{{items.roomid}}</td>
+                  <td>{{items.project_title}}</td>
+                  <td>{{items.renttype == 1 ? items.rentamt:0}}</td>
+                  <td>{{items.renttype == 1 ? 0:items.rentamt}}</td>
+                  <td>{{items.statename}}</td>
+                  <td>{{items.districtname}}</td>
+                  <td>{{items.paymonthdate}}</td>
+                  <td>{{items.paymode == 1 ? "To Account" : items.paymode == 2 ? "By Hand Cash": items.paymode == 3 ? "Cheque" : "Others"}}</td>
+                  <td>{{items.utr}}</td>
+                  <td>{{items.cheque_no}}</td>
+                  <td>{{items.paid_name}}</td>
+                  <td>{{items.brokerage_amt}}</td>
+                  <td>{{items.recovery_amt}}</td>
+                  <td>{{items.rentnote}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  

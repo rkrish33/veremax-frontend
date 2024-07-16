@@ -1,0 +1,130 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="header-title mt-1">{{vehId ? "EDIT":"ASSIGN" }} VEHICLE PROJECT</h1>
+    </div>
+    <form [formGroup]="projectform" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row" style="margin: 0.1 px; max-width: 900px;">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Create Type<span style="color: rgb(235, 12, 12);">*</span></label>
+              <select class="form-control" formControlName="create_type">
+                <option value="1">Individual</option>
+                <option value="2">Bulk</option>
+              </select>
+              <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                <span *ngIf="form.create_type.errors.required">Create Type Required!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="form['create_type'].value=='2'">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <a href="\assets\public\Vehicle_project_assign.xlsx" target="_blank" download><b
+                    style="color: blue;">DOWNLOAD
+                    SAMPLE HERE</b></a>
+              </div>
+            </div>
+            <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+              <div class="col-sm-8">
+                <input #myFile type="file" (change)="changeListener($event.target.files[0])" class="form-control"
+                  accept=".xlsx" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="form['create_type'].value=='1'">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Project Name</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.project_id.invalid&&submit}"
+                optValues="project_title" placeholder="Select Project Name" formControlName="project_id"
+                optId="project_id" [item]="projects">
+              </auto-completen>
+              <div *ngIf="submit && form.project_id.errors" class="invalid-feedback">
+                <span *ngIf="form.project_id.errors.required">Please Select The projectname </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Vehicle Registration No</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen
+                [addclass]="{' form-control' : true,'form-control-danger':form.vehicle_id.invalid&&submit}"
+                optValues="regno" (keyUp)="registration_no($event)" placeholder="Select Registration No"
+                formControlName="vehicle_id" Id="id" [item]="registno">
+              </auto-completen>
+              <div *ngIf="submit && form.vehicle_id.errors" class="invalid-feedback">
+                <span *ngIf="form.vehicle_id.errors.required">Please Select The Vehicle No </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="Circle stats">State</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen [addclass]="{'form-control' : true,'form-control-danger':form.state_id.invalid && submit}"
+                optValues="name" (keyUp)="circle($event)" (changed)="changeCluster()" placeholder="Select State"
+                formControlName="state_id" optId="id" [item]="circles">
+              </auto-completen>
+              <div *ngIf="submit && form.state_id.errors" class="invalid-feedback">
+                <span *ngIf="form.state_id.errors.required">Circle type is required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <auto-completen
+                [addclass]="{'form-control' : true,'form-control-danger':form.district_id.invalid && submit}"
+                optValues="name" (keyUp)="changeCluster($event)" placeholder="Select District"
+                formControlName="district_id" optId="id" [item]="clusters">
+              </auto-completen>
+              <div *ngIf="submit && form.district_id.errors" class="invalid-feedback">
+                <span *ngIf="form.district_id.errors.required">Please Select Cluster</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Start Date</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+              <input type="date" class="form-control" formControlName="start_date" placeholder="Enter start Date"
+                [ngClass]="{'is-invalid': submit && form.start_date.errors}">
+              <div *ngIf="submit && form.start_date.errors" class="invalid-feedback">
+                <span *ngIf="form.start_date.errors.required">Select Start Date</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4" *ngIf=vehId>
+            <div class="form-group">
+              <label>End Date</label>
+              <input type="date" class="form-control" formControlName="end_date" placeholder="Enter expiry Date"
+                [ngClass]="{'is-invalid': submit && form.end_date.errors}">
+              <div *ngIf="submit && form.end_date.errors" class="invalid-feedback">
+                <span *ngIf="form.end_date.errors.required">Select Enter Date</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{vehId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(projectform)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

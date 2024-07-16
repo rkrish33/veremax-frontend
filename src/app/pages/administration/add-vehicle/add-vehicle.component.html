@@ -1,0 +1,33 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Vehicle Type Details</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="vehicletypeForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Vehicle Type</label>
+              <input type="text" class="form-control" formControlName="vehicletype" placeholder="Enter vehicletype"
+                [ngClass]="{'is-invalid': submit && form.vehicletype.errors}">
+              <div *ngIf="submit && form.vehicletype.errors" class="invalid-feedback">
+                <span *ngIf="form.vehicletype.errors.required">Pls fill Vehicle Type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(vehicletypeForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+
+

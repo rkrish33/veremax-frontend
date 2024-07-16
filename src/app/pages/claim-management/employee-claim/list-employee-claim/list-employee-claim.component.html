@@ -1,0 +1,178 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header" style="background-color:rgb(255, 255, 255) ;">
+            <button type="submit" style="float:left ;" class="btn btn-success" (click)="btnClick()">Add</button>
+            <button type="submit" style="float:right;" class="btn btn-success"(click)="download()">Export</button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Project</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="project_title"
+                            (keyUp)="listProjects($event)" placeholder="Select Project" [(ngModel)]="project_id"
+                            optId="project_id" [item]="projects">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Employee ID</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="emp_id"
+                            placeholder="Select Employee ID" [(ngModel)]="empid"
+                            optId="emp_id_pk" [item]="employeeList">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>State</label>&nbsp;&nbsp;<label      style="color: rgb(235, 12, 12);">*</label>
+                        <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+                            placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id"
+                            [item]="circles">
+                        </auto-completen>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+                        <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+                        placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+                        </auto-completen>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="text-centre">
+                <button type="submit" class="btn btn-success" (click)="listEmpClaims()">Search</button>&nbsp;&nbsp;
+                <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <p *ngIf="listClaimData">Total Records Found:{{listClaimData[1].total}}</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <nav *ngIf="pager" aria-label="Page navigation example">
+                        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                            <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=1;getlist();">First</a></li>
+                            <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                                    (click)="page=page-1;getlist();">Previous</a></li>
+                            <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=page+1;getlist();">Next</a></li>
+                            <li class="page-item"> <a class="page-link"
+                                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <label>Show</label>
+                <div class="col-sm-4">
+                    <select [(ngModel)]="limit" (change)="listEmpClaims()" class="form-control"
+                        style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+                        <option value="25" selected="selected">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="25">150</option>
+                        <option value="50">200</option>
+                        <option value="100">250</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body" style="text-align: center;">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead style="background-color: rgb(235, 216, 65);">
+                            <tr>
+                                <th>Action</th>
+                                <th>Project Name</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Type</th>
+                                <th>Activity</th>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Service Start Date</th>
+                                <th>Service End Date</th>
+                                <th>Claim Status</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="listClaimData">
+                            <tr *ngFor="let items of listClaimData[0]">
+                                <td class="overflow-hidden">
+                                    <div ngbDropdown container="body">
+                                        <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                                        <div ngbDropdownMenu>
+                                            <button ngbDropdownItem
+                                                [routerLink]="['/pages/Claim/Claim_Management/addempclaim']"
+                                                [queryParams]="{clmid:items.id}">Edit</button>
+                                                <button ngbDropdownItem  (click)="smallModal(smallDataModal ,items.id)">Approval Status</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{items.project_title}}</td>
+                                <td>{{items.emp_id}}</td>
+                                <td>{{items.full_name}}</td>
+                                <td>{{items.depname}}</td>
+                                <td>{{items.desname}}</td>
+                                <td>{{items.prsmname}}</td>
+                                <td>{{items.activity == 1 ? "O&M" : items.activity == 2 ? "Project": "Others"}}</td>
+                                <td>{{items.state_name}}</td>
+                                <td>{{items.dist_name}}</td>
+                                <td>{{items.servicesdate | date:"yyyy-MM-dd"}}</td>
+                                <td>{{items.serviceedate | date:"yyyy-MM-dd"}}</td>
+                                <td>{{items.approval_status == 0 ? "Pending" : items.approval_status == 1 ? "Approved L1" : items.approval_status == 2 ?  "Approved L2" : items.approval_status == 3 ? "Approved Final" : "Rejected" }}</td>
+                                <td>{{items.remarks}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <ng-template #smallDataModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Approval</h5>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-hidden="true">×</button>
+    </div>
+    <div class="modal-body">
+        <div class="col-sm-12" >
+              <label>Approval Levels</label>
+              <select class="form-control"  [(ngModel)]="approval">
+                <option value="" selected>Select Approval Level</option>
+                <option value="1">FRT Approval</option>
+                <option value="2">Circle Head Approval</option>
+                <option value="3">Final Approval</option>
+                <option value="99">Rejected</option>          
+              </select>
+              <div *ngIf="submit && form.approval.errors" class="invalid-feedback">
+                <span *ngIf="form.approval.errors.required">Select Approval
+                </span>
+              </div>
+          </div>
+          <div class="col-sm-12" *ngIf="approval =='99'">
+            <div class="form-group">
+              <label>Remarks</label>
+              <textarea type="text" class="form-control" [(ngModel)]="remark" placeholder="Remarks"></textarea>
+            </div>
+          </div>
+          <br>
+          <div class="col-sm-6">
+            <div class="text-centre">
+                <button type="submit" class="btn btn-success" (click)="approvalStatus()">Submit</button>&nbsp;&nbsp;
+            </div>
+        </div>
+    </div>
+  </ng-template>
+
+  <!-- *ngIf="menu_rolee.getmenurole(11)" -->

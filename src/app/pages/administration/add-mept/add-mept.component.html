@@ -1,0 +1,48 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0"> {{id ?"Edit":"Add"}} Cluster and Mept</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="MeptForm" (ngSubmit)="onSubmit()">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Circle</label>
+                <select class="form-control" formControlName="state_name"
+                  [ngClass]="{'is-invalid': submit && form.state_name.errors}">
+                  <option value="" selected>Select The Circle</option>
+                  <option *ngFor="let items of states" [ngValue]="items.state_mas_id">{{items.state_name}}</option>
+                </select>
+                <div *ngIf="submit && form.state_name.errors" class="invalid-feedback">
+                  <span *ngIf="form.state_name.errors.required">Please Select The state </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Cluster OR Mept</label>
+                <input type="text" class="form-control" formControlName="meptname"
+                  placeholder="Enter Your Cluster Name" [ngClass]="{'is-invalid': submit && form.meptname.errors}">
+                <div *ngIf="submit && form.meptname.errors" class="invalid-feedback">
+                  <span *ngIf="form.meptname.errors.required">Select The Cluster or Mept </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(MeptForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+

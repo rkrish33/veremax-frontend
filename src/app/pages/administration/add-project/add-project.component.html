@@ -1,0 +1,57 @@
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="header-title mt-0"> {{id ?"Edit":"Add"}} Project Details</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Client Name</label>
+                  <select class="form-control" formControlName="client_name"
+                    [ngClass]="{'is-invalid': submit && form.client_name.errors}">
+                    <option value="" selected>Select The Client Nme</option>
+                    <option *ngFor="let items of clients" [ngValue]="items.client_id">{{items.client_name}}</option>
+                  </select>
+                  <div *ngIf="submit && form.client_name.errors" class="invalid-feedback">
+                    <span *ngIf="form.client_name.errors.required">Please Select The Client Name</span>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Project Name</label>
+                  <input type="text" class="form-control" formControlName="project_name"
+                    placeholder="Enter Your Project Name" [ngClass]="{'is-invalid': submit && form.project_name.errors}">
+                  <div *ngIf="submit && form.project_name.errors" class="invalid-feedback">
+                    <span *ngIf="form.project_name.errors.required">Fill the Project Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Project Code</label>
+                  <input type="text" class="form-control" formControlName="project_code"
+                    placeholder="Enter Your Project Code" [ngClass]="{'is-invalid': submit && form.project_code.errors}">
+                  <div *ngIf="submit && form.project_code.errors" class="invalid-feedback">
+                    <span *ngIf="form.project_code.errors.required">Fill the Project Code</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="card-footer">
+            <div style="text-align: center;">
+              <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+              <button type="button" (click)="onReset(projectForm)" class="btn btn-danger">Reset</button>
+            </div>
+          </div>
+  
+        </form>
+      </div>
+    </div>
+  </div>

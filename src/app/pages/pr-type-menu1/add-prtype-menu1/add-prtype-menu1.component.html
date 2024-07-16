@@ -1,0 +1,43 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="header-title mt-0">{{prtypeid ? "Edit":"ADD"}}PR TYPE MENU 1</h1>
+    </div>
+    <form [formGroup]="Addprtypemenu1" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>PY TYPE</label>
+              <auto-completen [addclass]="{' form-control' : true,'form-control-danger':form.prid.invalid&&submit}"
+                optValues="prname" (keyUp)="prtypemenu($event)" placeholder="Select PR type"
+                formControlName="prid" optId="prid" [item]="prtype">
+              </auto-completen>
+              <div *ngIf="submit && form.prid.errors" class="invalid-feedback">
+                <span *ngIf="form.prid.errors.required">Please Select The prtype </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Menu Content</label>
+              <input type="text" class="form-control" formControlName="prsmname" placeholder="Enter Menu"
+                [ngClass]="{'is-invalid': submit && form.prsmname.errors}">
+              <div *ngIf="submit && form.prsmname.errors" class="invalid-feedback">
+                <span *ngIf="form.prsmname.errors.required">Enter Menu</span>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="card-footer">
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{prtypeid ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(Addprtypemenu1)" class="btn btn-danger">Reset</button>
+        </div>
+    </div>
+    </form>
+  </div>
+</div>

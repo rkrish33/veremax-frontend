@@ -1,0 +1,346 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header"  style="background-color:rgb(255, 255, 255);">
+      <h1 class="header-title mt-0">{{vehId ? "EDIT":"ADD"}} VEHICLE
+        DETAILS</h1>
+    </div>
+    <form [formGroup]="VehicleForm" (ngSubmit)="onSubmit()">
+      <div class="card-body">
+        <div class="row" style="margin: 0.1 px; max-width: 900px;">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Create Type <span style="color: rgb(235, 12, 12);">*</span></label>
+              <select class="form-control" formControlName="create_type" (changed)="bulkvalid()">
+                <option value="1">Individual</option>
+                <option value="2">Bulk</option>
+              </select>
+              <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                <span *ngIf="form.create_type.errors.required"> Create Type Required!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="value.create_type==2">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <a href="/assets/public/Vehicle_Details.xlsx" target="_blank" download><b style="color: blue;">DOWNLOAD
+                    SAMPLE HERE</b></a>
+              </div>
+            </div>
+            <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+              <div class="col-sm-8">
+                <input #myFile type="file" (change)="changeListener($event.target.files[0])" class="form-control"
+                  accept=".xlsx" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <ngb-tabset *ngIf="value.create_type == 1" type="pills" justify="justified" class="navtab-bg nav-justified">
+          <ngb-tab title="Basic">
+            <ng-template ngbTabContent class="nav-item">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Vehicle Type</label>
+                    <select class="form-control" formControlName="vehicletype">
+                      <option value="0">Own</option>
+                      <option value="1">Hired</option>
+                    </select>
+                    <div *ngIf="submit && form.vehicletype.errors" class="invalid-feedback">
+                      <span *ngIf="form.vehicletype.errors.required"> Create Type Required!
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Vehicle Registration No</label>
+                    <input type="text" class="form-control" formControlName="regNo" placeholder="Registration NO"
+                      [ngClass]="{'is-invalid': submit && form.regNo.errors}">
+                    <div *ngIf="submit && form.regNo.errors" class="invalid-feedback">
+                      <span *ngIf="form.regNo.errors.required">Enter Proper Vehicle No.
+                        For Example: TN34W8001
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Engine NO</label>
+                    <input type="text" class="form-control" formControlName="engNo" placeholder="Engine NO"
+                      [ngClass]="{'is-invalid': submit && form.engNo.errors}">
+                    <div *ngIf="submit && form.engNo.errors" class="invalid-feedback">
+                      <span *ngIf="form.engNo.errors.required">Fill The Engine Number</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Chassis NO</label>
+                    <input type="text" class="form-control" formControlName="chasNo" placeholder="Chassis NO"
+                      [ngClass]="{'is-invalid': submit && form.chasNo.errors}">
+                    <div *ngIf="submit && form.chasNo.errors" class="invalid-feedback">
+                      <span *ngIf="form.chasNo.errors.required">Fill The chassis Number</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Company Name</label>
+                    <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':form.companyname.invalid&&submit}"
+                      optValues="company_name" (keyUp)="companyname($event)" placeholder="Select Company Name"
+                      formControlName="companyname" optId="company_id" [item]="companynames">
+                    </auto-completen>
+                    <div *ngIf="submit && form.companyname.errors" class="invalid-feedback">
+                      <span *ngIf="form.companyname.errors.required">Please Select Company Name</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Vehicle Type</label>
+                    <select class="form-control" formControlName="dept"
+                      [ngClass]="{'is-invalid': submit && form.dept.errors}">
+                      <option value="">Select Vehicle Type</option>
+                      <option *ngFor="let items of vehicletypes" [ngValue]='items.vehicle_id'>
+                        {{items.vehicle_type}}</option>
+                    </select>
+                    <div *ngIf="submit && form.dept.errors" class="invalid-feedback">
+                      <span *ngIf="form.dept.errors.required">Please Select Vehicle TYpe</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Maker Name(Model)</label>
+                    <input type="text" class="form-control" formControlName="model" placeholder="Maker Name"
+                      [ngClass]="{'is-invalid': submit && form.model.errors}">
+                    <div *ngIf="submit && form.model.errors" class="invalid-feedback">
+                      <span *ngIf="form.model.errors.required">Fill The Model</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>FuelCard No</label>
+                    <auto-completen
+                      [addclass]="{' form-control' : true,'form-control-danger':form.fuelcardid.invalid&&submit}"
+                      optValues="cardno" (keyUp)="fuelcard_no($event)" placeholder="Select Fuelcard No"
+                      formControlName="fuelcardid" Id="id" [item]="fuelcard">
+                    </auto-completen>
+                    <!-- 
+                    <auto-completen
+                    [addclass]="{error: submit && form.controls.fuelcardid.errors}"
+                     addclass="form-control" optValues="cardno" formControlName="fuelcardid" (keyUp)="fuelcard_no($event)"
+                     placeholder="Select Fuelcard No" Id="id" [item]="fuelcard">
+                   </auto-completen> -->
+                    <!-- <div *ngIf="submit && form.fuelcardid.errors" class="invalid-feedback">
+                      <span *ngIf="form.fuelcardid.errors.required">Select Fuelcard No </span>
+                    </div> -->
+                    <!-- <div
+            *ngIf="form.controls.fuelcardid.errors && form.controls.fuelcardid.errors.required && submit  "
+            class="error-text">
+           Fuel card is required!
+          </div> -->
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Register Date</label>
+                    <input type="date" class="form-control" formControlName="regdate"
+                      (change)="generateExpiryDate(form.regdate)"
+                      [ngClass]="{'is-invalid': submit && form.regdate.errors}">
+                    <div *ngIf="submit && form.regdate.errors" class="invalid-feedback">
+                      <span *ngIf="form.regdate.errors.required">Register Date</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Registration Expiry Date</label>
+                    <input type="date" class="form-control" formControlName="regexpdate" [min]="minExpireDate"
+                      [ngClass]="{'is-invalid': submit && form.regexpdate.errors}">
+                    <div *ngIf="submit && form.regexpdate.errors" class="invalid-feedback">
+                      <span *ngIf="form.regexpdate.errors.required">Register Expiry Date</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>FC Expiry Date</label>
+                    <input type="date" class="form-control" formControlName="fc_exp_date"
+                      placeholder="Enter FC Expiry Date" [ngClass]="{'is-invalid': submit && form.fc_exp_date.errors}">
+                    <div *ngIf="submit && form.fc_exp_date.errors" class="invalid-feedback">
+                      <span *ngIf="form.fc_exp_date.errors.required">FC expiry Date</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Insurance Expiry Date</label>
+                    <input type="date" class="form-control" formControlName="insurance_exp_date"
+                      placeholder="Enter expiry Date"
+                      [ngClass]="{'is-invalid': submit && form.insurance_exp_date.errors}">
+                    <div *ngIf="submit && form.insurance_exp_date.errors" class="invalid-feedback">
+                      <span *ngIf="form.insurance_exp_date.errors.required">Enter Expiry Date</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Insurance Company Name</label>
+                    <input type="text" class="form-control" formControlName="inscomp"
+                      placeholder="Insurance Company Name" [ngClass]="{'is-invalid': submit && form.inscomp.errors}">
+                    <div *ngIf="submit && form.inscomp.errors" class="invalid-feedback">
+                      <span *ngIf="form.inscomp.errors.required">Enter Insurance Company Name</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Pollution Expiry Date</label>
+                    <input type="date" class="form-control" formControlName="pollution_exp_date"
+                      placeholder="Enter expiry Date"
+                      [ngClass]="{'is-invalid': submit && form.pollution_exp_date.errors}">
+                    <div *ngIf="submit && form.pollution_exp_date.errors" class="invalid-feedback">
+                      <span *ngIf="form.pollution_exp_date.errors.required">Enter Expiry Date</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Permit Expiry Date</label>
+                    <input type="date" class="form-control" formControlName="permitexpiry"
+                      placeholder="Select Permit expiry Date"
+                      [ngClass]="{'is-invalid': submit && form.permitexpiry.errors}">
+                    <div *ngIf="submit && form.permitexpiry.errors" class="invalid-feedback">
+                      <span *ngIf="form.permitexpiry.errors.required"><Select></Select> Permit Expiry Date</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="Circle stats">State</label>
+                    <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':form.circle_name.invalid && submit}"
+                      optValues="name" (keyUp)="circle($event)" (changed)="changeCluster()" placeholder="Select State"
+                      formControlName="circle_name" Id="id" [item]="circles">
+                    </auto-completen>
+                    <div *ngIf="submit && form.circle_name.errors" class="invalid-feedback">
+                      <span *ngIf="form.circle_name.errors.required">Circle type is required</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>District</label>
+                    <auto-completen
+                      [addclass]="{'form-control' : true,'form-control-danger':form.cluster.invalid && submit}"
+                      optValues="name" (keyUp)="changeCluster($event)" placeholder="Select District"
+                      formControlName="cluster" Id="id" [item]="clusters">
+                    </auto-completen>
+                    <div *ngIf="submit && form.cluster.errors" class="invalid-feedback">
+                      <span *ngIf="form.cluster.errors.required">Please Select Cluster</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label>Other Remarks</label>
+                    <textarea type="text" class="form-control" formControlName="remark" placeholder="Remark"
+                      [ngClass]="{'is-invalid': submit && form.remark.errors}"></textarea>
+                    <div *ngIf="submit && form.remark.errors" class="invalid-feedback">
+                      <span *ngIf="form.remark.errors.required">Remarks</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group" *ngIf="form['vehicletype'].value=='1'">
+                    <label>Vendor Name</label>
+                    <input type="text" class="form-control" formControlName="vendor_name" placeholder="Vendor Name">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Status</label>
+                    <input type="checkbox" class="form-control" formControlName="status"
+                      style="width:10%;height:auto; transform: scale(1.5);">
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab title="Documents" *ngIf="!vehId">
+            <ng-template ngbTabContent class="nav-item">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>FC Upload</label>
+                    <input type="file" class="form-control" id="formFile" multiple
+                      (change)="upload($event.target.files[0],1)" formControlName="fcdoc">
+                    <!-- <div *ngIf="submit && form.fcdoc.errors" class="invalid-feedback">
+                      <span *ngIf="form.fcdoc.errors.required">Choose the file</span>
+                    </div> -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Insurance Upload</label>
+                    <input type="file" class="form-control" formControlName="insdoc"
+                      (change)="upload($event.target.files[0],2)">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Pollution Upload</label>
+                    <input type="file" class="form-control" formControlName="polldoc"
+                      (change)="upload($event.target.files[0],3)">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Permit Upload</label>
+                    <input type="file" class="form-control" formControlName="permitdoc"
+                      (change)="upload($event.target.files[0],4)">
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6">
+                  <div class="form-group">
+                    <label>Other Document Upload</label>
+                    <input type="file" class="form-control" formControlName="otherdoc"
+                      (change)="upload($event.target.files[0],5)"
+                      [ngClass]="{'is-invalid': submit && form.otherdoc.errors}">
+                    <div *ngIf="submit && form.otherdoc.errors" class="invalid-feedback">
+                      <span *ngIf="form.otherdoc.errors.required">Choose the file</span>
+                    </div>
+                  </div>
+                </div>  -->
+
+                <div class="col-sm-4" *ngIf="imageURL!=''">
+                  <label>File</label>
+                  <img *ngFor="let url of imageURL" [src]="url" style="width: 80%;height: 100px">
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+      <div class="card-footer">
+        <div style="text-align: center;">
+          <button type="submit" class="btn btn-success">{{vehId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+          <button type="button" (click)="onReset(VehicleForm)" class="btn btn-danger">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<ng-template #smallDataModal let-modal>
+--3p478</ng-template>

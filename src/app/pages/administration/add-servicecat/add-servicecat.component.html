@@ -1,0 +1,31 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{id?"Edit":"Add"}} Service Category Name</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="serviceCatForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Service Category Name</label>
+              <input type="text" class="form-control" formControlName="servcatname" placeholder="Enter servcatname"
+                [ngClass]="{'is-invalid': submit && form.servcatname.errors}">
+              <div *ngIf="submit && form.servcatname.errors" class="invalid-feedback">
+                <span *ngIf="form.servcatname.errors.required">Pls fill Category Name</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(serviceCatForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+

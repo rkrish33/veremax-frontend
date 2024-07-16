@@ -1,0 +1,110 @@
+
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0"> Add Designation</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="designationForm">
+        
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-9">
+              <div class="form-group">
+              <label>Select The Project</label>
+              <select class="form-control" formControlName="project_id" (change)="getData()">
+                <option value="" selected>Select The Project</option>
+                <option *ngFor="let items of projects" [ngValue]="items.project_id">{{items.project_title}}</option>
+              </select>
+              <div *ngIf="submit && form.project_id.errors" class="invalid-feedback">
+                <span *ngIf="form.project_id.errors.required">Please Select The Project</span>
+              </div>
+            </div>
+            </div>
+            
+          </div>
+        </div> 
+
+        <div class="col-sm-12" *ngIf="form['project_id'].value !='' && getDatas?.length==0">
+        <div  formArrayName="leveldetailsId">
+            <div *ngFor="let user of leveldetailsId.controls;let idx = index;let last = last;">
+              <div [formGroupName]="idx">
+                <div class="row">
+                  <div class="col-sm-3">
+                  <div class="form-group" >
+                    <label>Level Id</label>
+                    <input type="text" name="level_id" formControlName="level_id" readonly class="form-control" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group" >
+                    <label>Level Name</label>
+                    <input type="text" name="level_name" formControlName="level_name"  class="form-control" />
+                  </div>
+                </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Designation</label>
+                      <select class="form-control" formControlName="design_name">
+                        <option value="" selected>Select The Designation</option>
+                        <option *ngFor="let items of Roles" [hidden]=data
+                         [ngValue]="items.role_id_pk">{{items.role_name}}
+                        </option>
+                      </select>
+                    
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Claim Amount Limit</label>
+                      <input type="text" name="claim_amount" formControlName="claim_amt_limit"  class="form-control" />
+                    
+                    </div>
+                  </div>
+                 
+                   
+                </div>
+              </div>
+              
+
+            </div>
+          </div>
+        </div>
+</form>
+      <div class="col-sm-12" *ngIf="getDatas?.length!=0">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead  style="background-color:rgb(186, 199, 204);" *ngIf="getDatas">
+              <tr>
+                <th>Level Id</th>
+                <th>Level Name</th>
+                <th>Designation Name</th>
+                <th>Claim Amount</th>
+              </tr>
+              </thead>
+              <tbody >
+              <tr *ngFor="let items of getDatas">
+                <td>{{items.levelid}}</td>
+                <td>{{items.level_name}}</td>
+                <td>{{items.desc_name}}</td>
+                <td>{{items.claim_amt_limit}}</td>
+              </tr>
+            </tbody>
+          </table>
+         </div>
+        </div>
+    </div>
+    <div class="card-footer">
+      <div style="text-align: center;">
+        <div class="col-sm-3" *ngIf="getDatas?.length==0">
+          <div>
+            <button type="button" class="btn btn-primary" (click)= "onSubmit()">Add</button>&nbsp;&nbsp;
+            </div>
+        </div>
+        
+          <div *ngIf="getDatas?.length!=0">
+            <button type="button" (click)="deleteArray()"class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+  </div>

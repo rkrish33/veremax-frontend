@@ -1,0 +1,52 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{id ?"Edit":"Add"}}Client</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Client Name</label>
+              <input type="text" class="form-control" formControlName="client_name" placeholder="Enter client_name"
+                [ngClass]="{'is-invalid': submit && form.client_name.errors}">
+              <div *ngIf="submit && form.client_name.errors" class="invalid-feedback">
+                <span *ngIf="form.client_name.errors.required">Pls fill Category Name</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>Client Shortname</label>
+              <input type="text" class="form-control" formControlName="client_code" placeholder="Client Shortname"
+                [ngClass]="{'is-invalid': submit && form.client_code.errors}">
+              <div *ngIf="submit && form.client_code.errors" class="invalid-feedback">
+                <span *ngIf="form.client_code.errors.required">codee</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+               <label>VMX Vendor Code</label>
+              <input type="text" class="form-control" formControlName="vmx_ven_code" placeholder="Code"
+                [ngClass]="{'is-invalid': submit && form.vmx_ven_code.errors}">
+              <div *ngIf="submit && form.vmx_ven_code.errors" class="invalid-feedback">
+                <span *ngIf="form.vmx_ven_code.errors.required"> Vmx codee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}}</button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(clientForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+

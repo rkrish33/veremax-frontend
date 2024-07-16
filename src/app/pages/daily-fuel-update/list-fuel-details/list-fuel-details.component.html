@@ -1,0 +1,93 @@
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="header-title mt-0">Fuel Details List</h2>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Vehicle Registration No</label>
+              <auto-completen [addclass]="{'form-control': true}" optValues="regno" (keyUp)="registration_no($event)"
+                placeholder="Select Registration No" [(ngModel)]="vehicleno" optId="vechicleid" [item]="registno">
+              </auto-completen>
+              <!-- <div *ngIf="submit && form.vehicleno.errors" class="invalid-feedback">
+                <span *ngIf="form.vehicleno.errors.required">Please Select The projectname </span>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="text-centre">
+          <button type="submit" class="btn btn-success" (click)="listfueltop()">Search</button>&nbsp;&nbsp;
+          <button type="button" (onclick)="onReset()" class="btn btn-danger">Reset</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <p *ngIf="listfueltpup">Total Records Found:{{listfueltpup[1].total}}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <nav *ngIf="pager" aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=1;getlist();">First</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=page-1;getlist();">Previous</a></li>
+                <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=page+1;getlist();">Next</a></li>
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+              </ul>
+            </nav> 
+          </div>
+  
+          <label>show</label>
+          <div class="col-sm-3">
+            <select [(ngModel)]="limit" (change)="listfueltpup()" class="form-control"
+              style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:50px;border-radius: 5px;">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success" (click)="download()">DownLoad Excel</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped mb-0"> 
+              <thead style="background-color:rgb(157, 207, 208);">
+                <tr>
+                  <th>Action</th>
+                  <th>Vehicle No</th>
+                  <th>Fuel(Litres)</th>
+                  <th>Amount</th>
+                  <th>Runned Kms</th>
+                  <th>Payment mode</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="listfueltpup">
+                <tr *ngFor="let items of pagedItems">
+                  <td class="overflow-hidden">
+                    <div ngbDropdown container="body">
+                      <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action</button>
+                      <div ngbDropdownMenu>
+                        <button ngbDropdownItem [routerLink]="['/pages/DailyFuelTopup/addfuel']"
+                          [queryParams]="{vftupid:items.vftupid}" [skipLocationChange]="true">Edit</button>
+                      </div>
+                    </div>
+                  </td>
+                    <td>{{items.regno}}</td>
+                    <td>{{items.fuel_litre}}</td>
+                    <td>{{items.vftup_amt}}</td>
+                    <td>{{items.cur_km}}</td>
+                    <td>{{items.pay_mode}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

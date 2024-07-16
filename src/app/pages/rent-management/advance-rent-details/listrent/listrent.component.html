@@ -1,0 +1,161 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header" style="background-color:rgb(255, 255, 255) ;">
+      <button type="submit" style="float:left ;" class="btn btn-success" (click)="btnClick()">Add</button>
+      <button type="submit" style="float:right;" class="btn btn-success"(click)="download()">Export</button>
+  </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">House Owner Name</label>
+            <input type="text" class="form-control" [(ngModel)]="owner_name" placeholder="Enter Owner Name"
+              (keyup)="listRent()">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Project ID</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="project_title" (keyUp)="listProjects($event)"
+              placeholder="Select Project" [(ngModel)]="project_id" optId="project_id" [item]="projects">
+            </auto-completen>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>State</label>
+            <auto-completen [addclass]="{'form-control': true}" optValues="name" (keyUp)="circle($event)"
+              placeholder="Select State" (changed)="clusters()" [(ngModel)]="state_id" optId="id" [item]="circles">
+            </auto-completen>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>District</label>&nbsp;&nbsp;<label style="color: rgb(235, 12, 12);">*</label>
+            <auto-completen [addclass]="{'form-control' : true}" optValues="name" (keyUp)="clusters($event)"
+              placeholder="Select District" [(ngModel)]="cluster" optId="id" [item]="clusterlist">
+            </auto-completen>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">Active Date</label>
+            <input type="date" class="form-control" [(ngModel)]="start_date">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="area">Closing Date</label>
+            <input type="date" class="form-control" [(ngModel)]="end_date">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="text-center">
+        <button type="submit" class="btn btn-success" (click)="listRent()">Search</button>&nbsp;&nbsp;
+        <button type="button" (click)="onReset()" class="btn btn-warning">Reset</button>
+      </div>
+    </div>
+      <div class="card-body">
+        <p *ngIf="listDatas">Total Records Found:{{listDatas[1].total}}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <nav *ngIf="pager" aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item"> <a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=1;getlist();">First</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === 1}"
+                    (click)="page=page-1;getlist();">Previous</a></li>
+                <li *ngFor="let page of pager.pages" class="page-item"><a class="page-link"
+                    [ngClass]="{active:pager.currentPage === page}" (click)="getlist(page)">{{page}}</a></li>
+                <li class="page-item"><a class="page-link" [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=page+1;getlist();">Next</a></li>
+                <li class="page-item"> <a class="page-link"
+                    [ngClass]="{disabled:pager.currentPage === pager.totalPages}"
+                    (click)="page=pager.totalPages;getlist();">Last</a></li>
+              </ul>
+            </nav>
+          </div>
+          <label>show</label>
+          <div class="col-sm-4">
+            <select [(ngModel)]="limit" (change)="listRent()" class="form-control"
+              style="height: calc(1.5rem + 10px);max-width: 12vh;min-width:63px;border-radius: 5px;">
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="25">150</option>
+              <option value="50">200</option>
+              <option value="100">250</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success" (click)="download()">Download</button>
+        </div>
+        <div class="table-responsive" style="text-align: center;">
+          <table class="table table-striped mb-0">
+            <thead style="background-color: rgb(235, 216, 65);">
+              <tr>
+                <th>Action</th>
+                <th>Owner Name</th>
+                <th>Owner Adress</th>
+                <th>Rental Adress</th>
+                <th>Room Category</th>
+                <th>Project</th>
+                <th>Advance Amount</th>
+                <th>Monthly Rent</th>
+                <th>Owner Mail</th>
+                <th>Owner Phone</th>
+                <th>Owner Aadhar</th>
+                <th>State</th>
+                <th>District</th>
+                <th>Sublocation</th>
+                <th>Rent Active Date</th>
+                <th>Rent Closing Date</th>
+                <th>Agreement Active Date</th>
+                <th>Agreement Expiry Date</th>
+                <th>Agreement Status</th>
+                <th>Approval Manager</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="listDatas">
+              <tr *ngFor="let items of listDatas[0]">
+                <td class="overflow-hidden">
+                  <div ngbDropdown container="body">
+                    <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Action
+                      <i [attr.data-feather]="'chevron-down'" appFeatherIcon></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <button ngbDropdownItem [routerLink]="['/pages/Rent/Rental_Management/addrent']"
+                        [queryParams]="{roomid:items.roomid}" [skipLocationChange]="true">Edit</button>
+                    </div>
+                  </div>
+                </td>
+                <td>{{items.owner_name}}</td>
+                <td>{{items.owner_address}}</td>
+                <td>{{items.rent_address}}</td>
+                <td>{{items.room_category_name}}</td>
+                <td>{{items.project_title}}</td>
+                <td>{{items.advance_amt}}</td>
+                <td>{{items.rent_amt}}</td>
+                <td>{{items.owner_mail}}</td>
+                <td>{{items.owner_mobile}}</td>
+                <td>{{items.owner_aadhar}}</td>
+                <td>{{items.state_name}}</td>
+                <td>{{items.district}}</td>
+                <td>{{items.sub_location}}</td>
+                <td>{{items.start_date}}</td>
+                <td>{{items.end_date}}</td>
+                <td>{{items.agr_start_date}}</td>
+                <td>{{items.agr_end_date}}</td>
+                <td><span class="badge py-1" [ngClass]="{
+                  'badge-soft-success': items.agr_status === 'Active',
+                  'badge-soft-danger': items.agr_status === 'Expired' }">{{ items.agr_status }}</span>
+                </td>
+                <td>{{items.approvalname}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

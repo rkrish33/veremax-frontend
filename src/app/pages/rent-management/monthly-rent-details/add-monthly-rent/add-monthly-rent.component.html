@@ -1,0 +1,240 @@
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="header-title mt-0">{{rentId ? "EDIT":"ADD"}} Rental Details</h1>
+        </div>
+
+        <form [formGroup]="monthlyrentform" (ngSubmit)="onSubmit()">
+            <div class="card-body">
+                <div class="row" style="margin: 0.1 px; max-width: 900px;">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Create Type<span style="color: rgb(235, 12, 12);">*</span></label>
+                            <select class="form-control" formControlName="create_type">
+                                <option value="1">Individual</option>
+                                <option value="2">Bulk</option>
+                            </select>
+                            <div *ngIf="submit && form.create_type.errors" class="invalid-feedback">
+                                <span *ngIf="form.create_type.errors.required"> Create Type Required!
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="form['create_type'].value=='2'">
+                    <div class="col-md-5">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <a href="\assets\public\Rent_Advance.xlsx" target="_blank" download><b
+                                        style="color: blue;">DOWNLOAD
+                                        SAMPLE HERE</b></a>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin: 0.1 px; max-width: 900px;">
+                            <div class="col-sm-8">
+                                <input #myFile type="file" (change)="changeListener($event.target.files[0])"
+                                    class="form-control" accept=".xlsx" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="form['create_type'].value=='1'">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Rent Type</label>
+                            <select class="form-control" formControlName="rent_type"
+                                [ngClass]="{ 'is-invalid': submit && form.rent_type.errors }">
+                                <option value="">Select Rent Type</option>
+                                <option value="1">Rent</option>
+                                <option value="2">Advance</option>
+                            </select>
+                            <div *ngIf="submit && form.rent_type.errors" class="invalid-feedback">
+                                <span *ngIf="form.rent_type.errors.required">Please Select Rent Type</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['rent_type'].value=='1' || form['rent_type'].value=='2'">
+                        <div class="form-group">
+                            <label>Room Id</label>
+                            <auto-completen
+                                [addclass]="{' form-control' : true,'form-control-danger':form.room_id.invalid&&submit}"
+                                optValues="roomid" placeholder="Select Project Name" (changed)="listProjects()"
+                                formControlName="room_id" optId="roomid" [item]="advance_rent">
+                            </auto-completen>
+                            <div *ngIf="submit && form.room_id.errors" class="invalid-feedback">
+                                <span *ngIf="form.room_id.errors.required">Select Room ID</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4" *ngIf="form['rent_type'].value=='1'|| form['rent_type'].value=='2'">
+                        <div class="form-group">
+                            <label>Project Name</label>
+                            <auto-completen
+                                [addclass]="{' form-control' : true,'form-control-danger':form.project_id.invalid&&submit}"
+                                optValues="project_title" placeholder="Select Project Name" formControlName="project_id"
+                                optId="project_id" [item]="project_value">
+                            </auto-completen>
+                            <div *ngIf="submit && form.project_id.errors" class="invalid-feedback">
+                                <span *ngIf="form.project_id.errors.required">Please Select The projectname </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['rent_type'].value=='1'|| form['rent_type'].value=='2'">
+                        <div class="form-group">
+                            <label for="Circle stats">State</label>
+                            <auto-completen
+                                [addclass]="{'form-control' : true,'form-control-danger':form.circle_name.invalid && submit}"
+                                optValues="state_name" placeholder="Select State" formControlName="circle_name"
+                                optId="stateid" [item]="project_value">
+                            </auto-completen>
+                            <div *ngIf="submit && form.circle_name.errors" class="invalid-feedback">
+                                <span *ngIf="form.circle_name.errors.required">Circle type is required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['rent_type'].value=='1'|| form['rent_type'].value=='2'">
+                        <div class="form-group">
+                            <label>District</label>
+                            <auto-completen
+                                [addclass]="{'form-control' : true,'form-control-danger':form.cluster.invalid && submit}"
+                                optValues="district" placeholder="Select District" formControlName="cluster"
+                                optId="districtid" [item]="project_value">
+                            </auto-completen>
+                            <div *ngIf="submit && form.cluster.errors" class="invalid-feedback">
+                                <span *ngIf="form.cluster.errors.required">Please Select Cluster</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Payment Mode</label>
+                            <select class="form-control" formControlName="pay_type"
+                                [ngClass]="{ 'is-invalid': submit && form.pay_type.errors }">
+                                <option value="">Select</option>
+                                <option value="1">To Account</option>
+                                <option value="2">By Hand Cash</option>
+                                <option value="3">Cheque</option>
+                                <option value="4">Others</option>
+                            </select>
+                            <div *ngIf="submit && form.pay_type.errors" class="invalid-feedback">
+                                <span *ngIf="form.pay_type.errors.required">Please Select Payment Mode</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='3'">
+                        <div class="form-group">
+                            <label>Cheque No</label>
+                            <input type="text" class="form-control" formControlName="cheque_no"
+                                placeholder="Enter Cheque No"
+                                [ngClass]="{'is-invalid': submit && form.cheque_no.errors}">
+                            <div *ngIf="submit && form.cheque_no.errors" class="invalid-feedback">
+                                <span *ngIf="form.cheque_no.errors.required">Enter Cheque No</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                        *ngIf="form['pay_type'].value=='1' || form['pay_type'].value=='2' || form['pay_type'].value=='3'">
+                        <div class="form-group">
+                            <label>Paid Amount</label>
+                            <input type="text" class="form-control" formControlName="paid_amount"
+                                placeholder="Enter Rent/Advance Amount"
+                                [ngClass]="{'is-invalid': submit && form.paid_amount.errors}">
+                            <div *ngIf="submit && form.paid_amount.errors" class="invalid-feedback">
+                                <span *ngIf="form.paid_amount.errors.required">Enter Paid Amount</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='4'">
+                        <div class="form-group">
+                            <label>Advance Recovery Amount</label>
+                            <input type="text" class="form-control" formControlName="recovery_amt"
+                                placeholder="Enter Advance Recovery Amount"
+                                [ngClass]="{'is-invalid': submit && form.recovery_amt.errors}">
+                            <div *ngIf="submit && form.recovery_amt.errors" class="invalid-feedback">
+                                <span *ngIf="form.recovery_amt.errors.required">Enter Advance Recovery Amount</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='4'">
+                        <div class="form-group">
+                            <label>Brokerage Amount</label>
+                            <input type="text" class="form-control" formControlName="brokerage_amt"
+                                placeholder="Enter Brokerage Amount"
+                                [ngClass]="{'is-invalid': submit && form.brokerage_amt.errors}">
+                            <div *ngIf="submit && form.brokerage_amt.errors" class="invalid-feedback">
+                                <span *ngIf="form.brokerage_amt.errors.required">Enter Brokerage Amount</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4"
+                        *ngIf="form['pay_type'].value=='1' || form['pay_type'].value=='2' || form['pay_type'].value=='3' || form['pay_type'].value=='4'">
+                        <div class="form-group">
+                            <label>Paid Date</label>
+                            <input type="date" class="form-control" formControlName="paid_date"
+                                placeholder="Advance Paid Date"
+                                [ngClass]="{'is-invalid': submit && form.paid_date.errors}">
+                            <div *ngIf="submit && form.paid_date.errors" class="invalid-feedback">
+                                <span *ngIf="form.paid_date.errors.required">Fill Paid Date</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='1'">
+                        <div class="form-group">
+                            <label>UTR No</label>
+                            <input type="text" class="form-control" formControlName="utrno" placeholder="Enter UTR No"
+                                [ngClass]="{'is-invalid': submit && form.utrno.errors}">
+                            <div *ngIf="submit && form.utrno.errors" class="invalid-feedback">
+                                <span *ngIf="form.utrno.errors.required">Enter UTR No</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='2'">
+                        <div class="form-group">
+                            <label>Paid To Name</label>
+                            <input type="text" class="form-control" formControlName="paid_to_name"
+                                placeholder="Enter paid_to_name"
+                                [ngClass]="{'is-invalid': submit && form.paid_to_name.errors}">
+                            <div *ngIf="submit && form.paid_to_name.errors" class="invalid-feedback">
+                                <span *ngIf="form.paid_to_name.errors.required">Enter Name</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4" *ngIf="form['pay_type'].value=='4'">
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            <input type="text" class="form-control" formControlName="remarks"
+                                placeholder="Enter Remarks" [ngClass]="{'is-invalid': submit && form.remarks.errors}">
+                            <div *ngIf="submit && form.remarks.errors" class="invalid-feedback">
+                                <span *ngIf="form.remarks.errors.required">Enter the Remarks</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-success">{{rentId ? "Update":"Submit"}}</button>&nbsp;&nbsp;
+                    <button type="button" (click)="onReset(monthlyrentform)" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

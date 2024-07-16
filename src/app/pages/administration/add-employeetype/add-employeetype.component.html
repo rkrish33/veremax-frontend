@@ -1,0 +1,33 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="header-title mt-0">{{id?"Edit":"Add"}}Employee Type</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="subEmployeeForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label> Sub-Employee Type</label>
+              <input type="text" class="form-control" formControlName="subempayname" placeholder="Enter Employee Type"
+                [ngClass]="{'is-invalid': submit && form.subempayname.errors}">
+              <div *ngIf="submit && form.subempayname.errors" class="invalid-feedback">
+                <span *ngIf="form.subempayname.errors.required">Pls fill Sub-Employee Type</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card-footer">
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">{{id ?"Update":"Submit"}} </button>&nbsp;&nbsp;
+            <button type="button" (click)="onReset(subEmployeeForm)" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
